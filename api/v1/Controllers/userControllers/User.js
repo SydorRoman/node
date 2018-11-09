@@ -14,7 +14,7 @@ const posts = (req,res) => {
     jwt.verify(req.token, 'scretkey', (err,authData) => {
         if (data) {
             res.sendStatus(403);
-        }else{
+        } else {
             res.json({
                 message: 'post created',
                 authData
