@@ -2,17 +2,30 @@ const Routes = require('./api/v1/Routes');
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const app = express();
 
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());
-app.use('/api/v1', Routes);
+
 
 app.use(bodyParser.urlencoded({ extended: true}));
 
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
+  }));
+
 mongoose.connect("mongodb://localhost:27017/userdb");
 
+
+app.use('/api/v1', Routes);
+app.get('/porno',(req,res) => {
+    console.log(req.session.token);
+    res.end();
+});
 
 app.listen(8080, () => {
     console.log('Started at 8080.');

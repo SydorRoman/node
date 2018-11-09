@@ -1,7 +1,7 @@
 const User  = require('../../Models/User'); 
 const hash = require('../../../helper/hashPassword');
 const jwt = require('jsonwebtoken');
-
+const session = require('express-session');
 
 const bodyParser = require('body-parser');
 const express = require('express');
@@ -9,6 +9,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
  
+
+  
+
 const posts = (req,res) => {
 
     jwt.verify(req.token, 'scretkey', (err,authData) => {
@@ -23,13 +26,13 @@ const posts = (req,res) => {
     });
 };
 
+
+
 const login = async (req,res) => {
 
     let token;
     let user;
 
-    
- 
     try {
         user = await User.findOne({email: req.body.email});
 
@@ -44,16 +47,17 @@ const login = async (req,res) => {
             res.status(404);
             res.send({ error: 'user not found' });
         }
-        token = await jwt.sign({ user }, 'secretkey', { expiresIn: '30s' });
+        token = await jwt.sign({ user }, 'secretkey', { expiresIn: 1000*60*60*24*365 });
         if (!req.session) {
             req.session = {}
         }
         req.session.token = token;
+        console.log(req.session)
+        res.send({ token, user });
     } catch ({ message }) {
         res.status(500);
         res.send({ error: message });
     }
-     res.send({ token, user });
 };
 
 const getAll = async (req, res) => {
@@ -64,7 +68,8 @@ const getAll = async (req, res) => {
     } catch ({ message: error }) {
         res.send({ error });
     }
-
+    
+    
     console.log(usersCount);
 
     User.find({}, (err,result) => {
@@ -101,6 +106,8 @@ const createUser = async (req, res) => {
     });
 }
 
+
+
 const deleteUser = (req,res) => {
 
     User.findByIdAndRemove(req.params, (err,result) => {
@@ -122,7 +129,7 @@ const updateUser = (req,res) => {
     User.findByIdAndUpdate(req.params._id, req.body, {new: true, runValidators: true})
         .exec()
         .then(userData => res.status(200).send(userData))
-        .catch(err => res.status(404).send(err));
+        .catch(err => res.status(404).send(err)); 
 }
 
 const changePassword = async(req,res) => {

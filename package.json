@@ -5,7 +5,7 @@
   "main": "myScripts.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start" : "nodemon server.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,10 +13,10 @@
     "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.1.9",
     "mongoose": "^5.3.9",
     "nodemon": "^1.18.6"
-    
   }
-  
 }
