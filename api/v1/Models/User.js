@@ -9,7 +9,7 @@ const userScheme = new Schema({
     name: {
         type: String,
         required: true,
-        minlength: 3
+        minlength: 3    
     },
     email: {
         type: String,
@@ -31,13 +31,13 @@ const userScheme = new Schema({
     password: {
         type: String,
         required: true
-    } 
+    }
 
 }); 
 
 userScheme.methods.comparePasswords = function (password) {
     return bcrypt.compareSync(password, this.password);
-  };
+};
 
  
 module.exports = mongoose.model('User', userScheme);

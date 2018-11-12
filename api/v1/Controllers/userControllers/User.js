@@ -52,7 +52,7 @@ const login = async (req,res) => {
             req.session = {}
         }
         req.session.token = token;
-        console.log(req.session)
+        //console.log(req.session)
         res.send({ token, user });
     } catch ({ message }) {
         res.status(500);
