@@ -20,12 +20,7 @@ app.use(session({
 
 mongoose.connect("mongodb://localhost:27017/userdb");
 
-
 app.use('/api/v1', Routes);
-app.get('/porno',(req,res) => {
-    console.log(req.session.token);
-    res.end();
-});
 
 app.listen(8080, () => {
     console.log('Started at 8080.');

@@ -1,7 +1,9 @@
 const express = require('express');
+
 const app = express();
-const UserController = require('../Controllers/userControllers/User');
-const middleWares = require('../Middlewares/index');
+const UserController = require('../controllers/userControllers/user');
+const middleWares = require('../middlewares/index');
+
 console.log(middleWares.modules.verifyToken.modules.verifyToken);
 
 app.get('/', UserController.getAll);
@@ -10,15 +12,14 @@ app.get('/:id', UserController.getOne);
 
 app.post('/', UserController.createUser);
 
-app.delete('/:_id', UserController.deleteUser);
+app.delete('/:id', UserController.deleteUser);
 
-app.put('/:_id', UserController.updateUser);
+app.put('/:id', UserController.updateUser);
 
-app.put('/changePassword/:_id', UserController.changePassword);
+app.put('/changePassword/:id', UserController.changePassword);
 
 app.post('/login', UserController.login);
 
-app.post('/posts', middleWares.modules.verifyToken.modules.verifyToken,  UserController.posts);
-
+app.post('/posts', middleWares.modules.verifyToken.modules.verifyToken, UserController.posts);
 
 module.exports = app;
