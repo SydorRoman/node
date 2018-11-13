@@ -14,7 +14,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const getProducts = async (req, res) => {
   const decoded = jwt.decode(req.session.token, JWT_SECRET);
 
-  Product.find({ userId: decoded.user.id }, (err, result) => {
+ 
+  Product.find({ userId: decoded.user._id }, (err, result) => {
     if (err) {
       return res.json({
         messege: messeges.LIST_EMPTY,
@@ -39,7 +40,7 @@ const addProduct = (req, res) => {
 
   const productTemp = new Product(req.body);
 
-  productTemp.userId = decoded.user.id;
+  productTemp.userId = decoded.user._id;
 
   productTemp.save((err) => {
     if (err) {
@@ -61,6 +62,20 @@ const deleteProduct = (req, res) => {
 
 const editProduct = (req, res) => {
   if (req.body.userId) delete req.body.userId;
+
+  const decoded = jwt.decode(req.session.token, JWT_SECRET);
+
+  const tempUserId = decoded.user._id;
+
+  Product.findById(req.params.id, (err,result) => {
+    if (err) {
+        return res.send(messeges.NOT_FOUND);
+    }
+    if(JSON.stringify(tempUserId) !== JSON.stringify(result.userId)){
+        return res.send("not that user");
+    }
+
+  });
 
   Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .exec()

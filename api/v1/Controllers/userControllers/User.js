@@ -29,8 +29,6 @@ const login = async (req, res) => {
   let token;
   let user;
 
-  console.log( messeges.JWT_SECRET);
-
   try {
     user = await User.findOne({ email: req.body.email });
 
@@ -45,7 +43,8 @@ const login = async (req, res) => {
       res.status(404);
       res.send({ error: messeges.NOT_FOUND });
     }
-    token = await jwt.sign({ user }, messeges.JWT_SECRET, { expiresIn: 1000 * 60 * 60 * 24 * 365 });
+    console.log()
+    token = await jwt.sign({ user }, JWT_SECRET, { expiresIn: 1000 * 60 * 60 * 24 * 365 });
     if (!req.session) {
       req.session = {};
     }
@@ -85,8 +84,8 @@ const getOne = (req, res) => {
 const createUser = async (req, res) => {
   const userT = new User(req.body);
 
-  const hashed = await hash(userT.password);
-
+  const hashed = await hash.hashPass(userT.password);
+  
   userT.password = hashed;
 
   userT.save((err) => {
@@ -117,7 +116,7 @@ const updateUser = (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-  const password = await hash(req.body.password);
+  const password = await hash.hashPass(req.body.password);
   User.findByIdAndUpdate(req.params.id, { password }, { new: true, runValidators: true })
     .exec()
     .then(userData => res.status(200).send(userData))
