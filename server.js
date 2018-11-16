@@ -7,6 +7,13 @@ const app = express();
 
 mongoose.Promise = global.Promise;
 
+let dbName = 'userdb';
+if (process.env.NODE_ENV === 'test') dbName = 'testUserdb';
+
+if (process.env.NODE_ENV === 'prod') dbName = 'userdb';
+
+
+
 app.use(bodyParser.json());
 
 
@@ -17,14 +24,16 @@ app.use(session({
     resave: false,
     saveUninitialized: true
   }));
-
-mongoose.connect("mongodb://localhost:27017/userdb");
+  
+mongoose.connect(`mongodb://localhost:27017/${dbName}`,{ useNewUrlParser: true });
 
 app.use('/api/v1', Routes);
 
 app.listen(8080, () => {
     console.log('Started at 8080.');
 });
+
+module.exports = app;
 
 /*
 userScheme.pre('save', (next) => {

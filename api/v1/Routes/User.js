@@ -4,12 +4,10 @@ const app = express();
 const UserController = require('../controllers/userControllers/user');
 const middleWares = require('../middlewares/index');
 
-const refUserCar = require('../controllers/refController/ref');
-
 console.log(middleWares.modules.verifyToken.modules.verifyToken);
 
 /**
- * @api {get} /users Request All User Infromation
+ * @api {get} http://localhost:8080/api/v1/users Request All User Infromation
  * @apiName GetUsers
  * @apiGroup User
  * 
@@ -48,7 +46,7 @@ console.log(middleWares.modules.verifyToken.modules.verifyToken);
 app.get('/', UserController.getAll);
 
 /**
- * @api {get} /users/:id Find a User
+ * @api {get} http://localhost:8080/api/v1/users/:id Find a User
  * @apiGroup User
  * @apiName GetUser
  * @apiParam {id} id User id
@@ -77,18 +75,18 @@ app.get('/', UserController.getAll);
 app.get('/:id', UserController.getOne);
 
 /**
- * @api {post} /users Create  User
+ * @api {post} http://localhost:8080/api/v1/users Create  User
  * @apiGroup User
  * @apiName Create User
  * 
- * @apiParamExapmle {json} Input
+ * @apiParamExample {json} Input
  *   {
- *    "name" : "Kate"
- *    "email" : "kateRAW@gmail.com",
+ *    "name" : "Kate (required)"
+ *    "email" : "kateRAW@gmail.com (required)",
  *    "phone" : "(063)245-4444",
  *    "dateOfBirth" : "(063)245-4444",
  *    "about" : "Student...etc",
- *    "password" : "qwerty1"
+ *    "password" : "qwerty1 (required)"
  *   }
  * 
  * @apiSuccess {String} _id ID of the User
@@ -117,7 +115,7 @@ app.post('/', UserController.createUser);
 
 
 /**
- * @api {delete} /users/:id Delete User
+ * @api {delete} http://localhost:8080/api/v1/users/:id Delete User
  * @apiGroup User 
  * @apiParam {id} id User id
  * @apiName DeleteUser
@@ -131,7 +129,7 @@ app.delete('/:id', UserController.deleteUser);
 
 
 /**
- * @api {put} /users/:id Update User
+ * @api {put} http://localhost:8080/api/v1/users/:id Update User
  * @apiGroup User
  * @apiParam {id} id User id
  * @apiName User
@@ -173,7 +171,7 @@ app.put('/:id', UserController.updateUser);
 
 
 /**
- * @api {put} /users/changePasswors/:id Update User Password
+ * @api {put} http://localhost:8080/api/v1/users/changePasswors/:id Update User Password
  * @apiGroup User
  * @apiParam {id} id User id
  * @apiName ChangePassword
@@ -211,11 +209,11 @@ app.put('/changePassword/:id', UserController.changePassword);
 
 
 /**
- * @api {post} /users/login Login User
+ * @api {post} http://localhost:8080/api/v1/users/login Login User
  * @apiGroup User
  * @apiName Login User
  * 
- * @apiParamsExample {json} Input
+ * @apiParamExample {json} Input
  *   {
  *      "email" : "userEmail@gmail.com",
  *      "password" : "password"
@@ -255,7 +253,7 @@ app.post('/login', UserController.login);
 
 
 /**
- * @api {post} /users/posts User post
+ * @api {post} http://localhost:8080/api/v1/users/posts User post
  * @apiGroup User
  * @apiName Post User
  * 
@@ -275,9 +273,9 @@ app.post('/posts', middleWares.modules.verifyToken.modules.verifyToken, UserCont
 
 
 /**
- * @api {post} /user/car/:id Add Car for USer
- * @apiName post refUserCar
- * @apiGroup refUserCar
+ * @api {post} http://localhost:8080/api/v1/user/car/:id Add Car for USer
+ * @apiName post add car for User
+ * @apiGroup User
  * @apiParam {id} id Id of reference between user and car
  * 
  * @apiSuccess {String} _id Id of reference between user and car
@@ -294,12 +292,12 @@ app.post('/posts', middleWares.modules.verifyToken.modules.verifyToken, UserCont
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found 
  */
-app.post('car/:id', middleWares.modules.verifyToken.modules.verifyToken, refUserCar.addCar);
+app.post('car/:id', middleWares.modules.verifyToken.modules.verifyToken, UserController.addCar);
 
 /**
- * @api {get} /user/car Get all Cars of User
- * @apiName get refUserCar
- * @apiGroup  refUserCar
+ * @api {get} http://localhost:8080/api/v1/user/car Get all Cars of User
+ * @apiName get get user`s cars
+ * @apiGroup  User
  * 
  * @apiSuccess {String} _id Id of the Car
  * @apiSuccess {String} model Model of the Car
@@ -314,12 +312,12 @@ app.post('car/:id', middleWares.modules.verifyToken.modules.verifyToken, refUser
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found 
  */
-app.get('car/', middleWares.modules.verifyToken.modules.verifyToken, refUserCar.getCars);
+app.get('car/', middleWares.modules.verifyToken.modules.verifyToken, UserController.getCars);
 
 /**
- * @api {get} /user/car/:id Get one car of User
- * @apiName get refUserCar
- * @apiGroup  refUserCar
+ * @api {get} http://localhost:8080/api/v1/user/car/:id Get one car of User
+ * @apiName get user`s car
+ * @apiGroup  User
  * @apiParam {id} id Id of reference between user and car
  * 
  * @apiSuccess {String} _id Id of the Car
@@ -335,13 +333,13 @@ app.get('car/', middleWares.modules.verifyToken.modules.verifyToken, refUserCar.
  *    HTTP/1.1 404 Not Found  
  *
  */
-app.get('car/:id', middleWares.modules.verifyToken.modules.verifyToken, refUserCar.getOne);
+app.get('car/:id', middleWares.modules.verifyToken.modules.verifyToken, UserController.getOne);
 
 
 /**
- * @api {delete} /user/car/:id Remove car from user
- * @apiName delete refUSerCar
- * @apiGroup refUserCar
+ * @api {delete} http://localhost:8080/api/v1/user/car/:id Remove car from user
+ * @apiName delete user`s car
+ * @apiGroup User
  * @apiParam {id} id Id of reference between user and car
  * 
  * @apiSuccessExample {json} Success
@@ -354,7 +352,7 @@ app.get('car/:id', middleWares.modules.verifyToken.modules.verifyToken, refUserC
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('car/:id', middleWares.modules.verifyToken.modules.verifyToken, refUserCar.deleteCar);
+app.delete('car/:id', middleWares.modules.verifyToken.modules.verifyToken, UserController.deleteCar);
 
 
 module.exports = app;

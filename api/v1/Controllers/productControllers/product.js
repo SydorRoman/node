@@ -23,7 +23,7 @@ const getProducts = (req, res) => {
         messege: messeges.LIST_EMPTY,
       });
     }
-
+ 
     return res.send(result);
   });
 };

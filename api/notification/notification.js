@@ -1,13 +1,15 @@
-const DELETED_SUCCESSEFULLY = 'deleted sucessefully';
-const POST_CREATED = 'post created';
-const NOT_FOUND = 'not found';
-const BAD_PASSWORD = 'bad password';
+const DELETED_SUCCESSEFULLY = 'Deleted sucessefully';
+const POST_CREATED = 'Post created';
+const NOT_FOUND = 'Not found';
+const BAD_PASSWORD = 'Bad password';
 
-const LIST_EMPTY = 'list empty';
+const LIST_EMPTY = 'List empty';
 
-const FORBIDDEN = 'forbidden';
+const FORBIDDEN = 'Forbidden';
 
-const PROHIBITED_PERMISSIOM = 'prohibited promission';
+const PROHIBITED_PERMISSIOM = 'Prohibited promission';
+
+const PASSWORD_REQUIRED = 'Password is required'
 
 module.exports = {
   DELETED_SUCCESSEFULLY,
@@ -17,5 +19,6 @@ module.exports = {
   LIST_EMPTY,
   FORBIDDEN,
   PROHIBITED_PERMISSIOM,
+  PASSWORD_REQUIRED,
 
 };
