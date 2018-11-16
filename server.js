@@ -1,4 +1,5 @@
 const Routes = require('./api/v1/Routes');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -15,7 +16,7 @@ if (process.env.NODE_ENV === 'prod') dbName = 'userdb';
 
 
 app.use(bodyParser.json());
-
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true}));
 
