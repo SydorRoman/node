@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+
 const posts = (req, res) => {
   jwt.verify(req.token, JWT_SECRET, (err, authData) => {
     if (authData) {
@@ -85,12 +86,12 @@ const createUser = async (req, res) => {
   const userT = new User(req.body);
 
   const hashed = await hash.hashPass(userT.password);
-  
+
   userT.password = hashed;
 
   userT.save((err) => {
     if (err) {
-      res.status(400).send(err);
+      return res.status(400).send(err); 
     }
     res.status(201).send(userT);
   });

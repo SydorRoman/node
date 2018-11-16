@@ -11,10 +11,12 @@ const messeges = require('../../../notification/notification');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const getProducts = async (req, res) => {
-  const decoded = jwt.decode(req.session.token, JWT_SECRET);
+const parseJwt = token => token.split(' ')[1];
 
- 
+
+const getProducts = (req, res) => {
+  const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
+
   Product.find({ userId: decoded.user._id }, (err, result) => {
     if (err) {
       return res.json({
@@ -27,7 +29,9 @@ const getProducts = async (req, res) => {
 };
 
 const getOneProduct = (req, res) => {
-  Product.findById(req.params.id, (err, result) => {
+  const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
+  
+  Product.findOne({_id: req.params.id, userId: decoded.user._id}, (err, result) => {
     if (err) {
       return res.send(err);
     }
@@ -36,7 +40,7 @@ const getOneProduct = (req, res) => {
 };
 
 const addProduct = (req, res) => {
-  const decoded = jwt.decode(req.session.token, JWT_SECRET);
+  const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
 
   const productTemp = new Product(req.body);
 
@@ -63,7 +67,7 @@ const deleteProduct = (req, res) => {
 const editProduct = (req, res) => {
   if (req.body.userId) delete req.body.userId;
 
-  const decoded = jwt.decode(req.session.token, JWT_SECRET);
+  const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
 
   const tempUserId = decoded.user._id;
 
@@ -72,7 +76,9 @@ const editProduct = (req, res) => {
         return res.send(messeges.NOT_FOUND);
     }
     if(JSON.stringify(tempUserId) !== JSON.stringify(result.userId)){
-        return res.send("not that user");
+        return res.send.json({
+          messege: messeges.PROHIBITED_PERMISSIOM,
+        });
     }
 
   });
