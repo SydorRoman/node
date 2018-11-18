@@ -51,6 +51,7 @@ app.get('/', UserController.getAll);
  * @apiName GetUser
  * @apiParam {id} id User id
  * 
+ * 
  * @apiSuccess {String} _id ID of the User
  * @apiSuccess {String} name Name of the User
  * @apiSuccess {String} email Email of the User

@@ -5,7 +5,7 @@ const ProductController = require('../controllers/productControllers/product');
 const middleWares = require('../middlewares/index');
 
 /**
- * @api {get} /products Get all Products of User
+ * @api {get} http://localhost:8080/api/v1/products Get all Products of User
  * @apiGroup Product
  * @apiName get Product
  *
@@ -32,7 +32,7 @@ const middleWares = require('../middlewares/index');
 app.get('/', middleWares.modules.verifyToken.modules.verifyToken, ProductController.getProducts);
 
 /**
- * @api {post} /products Create new product for User
+ * @api {post} http://localhost:8080/api/v1/products Create new product for User
  * @apiGroup Product
  * @apiName Post Product
  *
@@ -64,7 +64,7 @@ app.get('/', middleWares.modules.verifyToken.modules.verifyToken, ProductControl
 app.post('/', middleWares.modules.verifyToken.modules.verifyToken, ProductController.addProduct);
 
 /**
- * @api {delete} /products/:id Delete Product of current User
+ * @api {delete} http://localhost:8080/api/v1/products/:id Delete Product of current User
  * @apiName Delete Product
  * @apiGroup Product
  * 
@@ -81,7 +81,7 @@ app.post('/', middleWares.modules.verifyToken.modules.verifyToken, ProductContro
 app.delete('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductController.deleteProduct);
 
 /**
- * @api {put} /products/:id Update Product of current User
+ * @api {put} http://localhost:8080/api/v1/products/:id Update Product of current User
  * @apiName Put Product
  * @apiGroup Product
  * 
@@ -117,7 +117,7 @@ app.delete('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductC
 app.put('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductController.editProduct);
 
 /**
- * @api {get} /products/:id Get Product of current User
+ * @api {get} http://localhost:8080/api/v1/products/:id Get Product of current User
  * @apiName Get Product
  * @apiGroup Product
  * 
