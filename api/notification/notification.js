@@ -1,24 +1,15 @@
-const DELETED_SUCCESSEFULLY = 'Deleted sucessefully';
-const POST_CREATED = 'Post created';
-const NOT_FOUND = 'Not found';
-const BAD_PASSWORD = 'Bad password';
-
-const LIST_EMPTY = 'List empty';
-
-const FORBIDDEN = 'Forbidden';
-
-const PROHIBITED_PERMISSIOM = 'Prohibited promission';
-
-const PASSWORD_REQUIRED = 'Password is required'
-
-module.exports = {
-  DELETED_SUCCESSEFULLY,
-  POST_CREATED,
-  NOT_FOUND,
-  BAD_PASSWORD,
-  LIST_EMPTY,
-  FORBIDDEN,
-  PROHIBITED_PERMISSIOM,
-  PASSWORD_REQUIRED,
-
+const values = {
+  DELETED_SUCCESSEFULLY: 'Deleted sucessefully',
+  POST_CREATED: 'Post created',
+  NOT_FOUND: 'Not found',
+  BAD_PASSWORD: 'Bad password',
+  LIST_EMPTY: 'List empty',
+  FORBIDDEN: 'Forbidden',
+  PROHIBITED_PERMISSIOM: 'Prohibited promission',
+  PASSWORD_REQUIRED: 'Password is required',
+  NAME_REQUIRED: 'Name is required',
+  NAME_REQUIRED: 'Email is required',
+  WRONG_FORMAT: 'wrong format',
 };
+
+module.exports = values;

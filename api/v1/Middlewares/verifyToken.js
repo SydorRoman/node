@@ -13,21 +13,23 @@ const verifyToken = async function (req, res, next) {
   const bearer = bearerHeader.split(' ');
   const bearerToken = bearer[1];
 
-  if (req.session.token === bearerToken) {
-    if (!req.state) {
-      req.state = {};
-    }
+ // console.log('session:\n', req.session.token);
+
+  // if (req.session.token === bearerToken) {
+  //   if (!req.state) {
+  //     req.state = {};
+  //   }
     try {
-      // console.log('TRY')
       const user = await jwt.verify(bearerToken, JWT_SECRET);
+      req.user = user;
       return next();
     } catch ({ message }) {
       res.status(500);
       return res.send({ message });
     }
-  } else {
-    return res.sendStatus(403);
-  }
+  // } else {
+  //   return res.sendStatus(403);
+  // }
 };
 
 exports.modules = { verifyToken };

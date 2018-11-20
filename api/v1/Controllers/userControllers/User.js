@@ -5,8 +5,7 @@ const User = require('../../models/user');
 const hash = require('../../../helper/hashPassword');
 const Car = require('../../models/car');
 const refUserCar = require('../../models/refUserCar');
-
-
+const Product = require('../../models/product')
 
 const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
@@ -38,6 +37,10 @@ const login = async (req, res) => {
   try {
     user = await User.findOne({ email: req.body.email });
 
+    if(!user) return res.status(404).send({ messege: messeges.NOT_FOUND });
+    
+    // console.log("req.body.password : " + req.body.password);
+    // console.log(user + " user");
     const isOk = await user.comparePasswords(req.body.password);
 
     if (!isOk) {
@@ -49,13 +52,12 @@ const login = async (req, res) => {
       res.status(404);
       res.send({ error: messeges.NOT_FOUND });
     }
-    console.log()
     token = await jwt.sign({ user }, JWT_SECRET, { expiresIn: 1000 * 60 * 60 * 24 * 365 });
     if (!req.session) {
       req.session = {};
     }
     req.session.token = token;
-    res.send({ token, user });
+    res.status(200).send({ token, user });
   } catch ({ message }) {
     res.status(500);
     res.send({ error: message });
@@ -89,12 +91,9 @@ const getOne = (req, res) => {
 
 const createUser = async (req, res) => {
 
-  if(!req.body.password)
-  {
-      return res.status(422).send({
-          message: messeges.PASSWORD_REQUIRED,
-      })
-  }
+  if(!req.body.password) return res.status(422).send({ message: messeges.PASSWORD_REQUIRE });
+  if(!req.body.name) return res.status(422).send({ message: messeges.NAME_REQUIRED });
+  if(!req.body.email) return res.status(422).send({ message: messeges.EMAIL_REQUIRE });
 
   const userT = new User(req.body);
   const hashed = await hash.hashPass(userT.password);
@@ -121,13 +120,24 @@ const deleteUser = (req, res) => {
       res.sendStatus(404);
       res.send(err);
     }
+    Product.findOneAndRemove({userId: req.params.id,}, (error) => {
+        if(error) { res.status(404).send({message: messeges.NOT_FOUND})};
+        console.log("Product deleted" + this.Product);
+    });
     res.send(messeges.DELETED_SUCCESSEFULLY);
   });
 };
 
 const updateUser = (req, res) => {
   if (req.body.password) delete req.body.password;
+  
+  if(!req.body.name) return res.status(422).send({ message: messeges.NAME_REQUIRED });
+  if(!req.body.email) return res.status(422).send({ message: messeges.EMAIL_REQUIRE });
 
+
+        // Do smth with error =======> 
+        // (node:96351) DeprecationWarning: collection.findAndModify is deprecated.
+        // Use findOneAndUpdate, findOneAndReplace or findOneAndDelete instead.
   User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
     .exec()
     .then(userData => res.status(200).send(userData))
@@ -135,10 +145,12 @@ const updateUser = (req, res) => {
 };
 
 const changePassword = async (req, res) => {
+
+
   const password = await hash.hashPass(req.body.password);
   User.findByIdAndUpdate(req.params.id, { password }, { new: true, runValidators: true })
     .exec()
-    .then(userData => res.status(200).send(userData))
+    .then(userData => { res.status(200).send(userData) } )
     .catch(err => res.status(404).send(err));
 };
 
@@ -153,7 +165,6 @@ const getCars = (req,res) => {
 
     User.findById(decoded.user._id, (err,result) => {
         if (err) {
-            console.log("here")
             return res.json({
                 messege: messeges.NOT_FOUND,
             });
@@ -162,7 +173,6 @@ const getCars = (req,res) => {
 
     refUserCar.find({userId: decoded.user._id} ,(err,result) => {
         if(err){
-            console.log("35here")
             return res.json({
                 messege: messeges.NOT_FOUND, 
             });
@@ -172,7 +182,6 @@ const getCars = (req,res) => {
 
         Car.find( { '_id': { $in: carsID }}, (error, resultCar ) => {
             if(error){
-                console.log("45here")
                 return res.json({
                     messege: messeges.NOT_FOUND,
                 });
@@ -188,7 +197,6 @@ const getOneCar = (req,res) => {
 
     User.find({_id: decoded.user._id}, (err,result) => {
         if(err){
-            console.log(61);
             return res.json({
                 messege: messeges.NOT_FOUND,
             });
@@ -197,7 +205,6 @@ const getOneCar = (req,res) => {
 
     refUserCar.find({userId: decoded.user._id, carId: req.params.id}, (err,result) => {
         if(err){
-            console.log(70);
             return res.json({
                 messege: messeges.NOT_FOUND,
             });
@@ -205,7 +212,6 @@ const getOneCar = (req,res) => {
 
         Car.findById(req.params.id, (error,data) => {
             if(error){
-                console.log(78);
                 return res.json({
                     messege: messeges.NOT_FOUND,
                 });

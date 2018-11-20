@@ -24,4 +24,16 @@ const middlewares = require('../middlewares/index');
  */
 app.get('/', carController.getAllCars);
 
+/*                      *** FOR ADMIN ***
+
+        * add car
+        * update car
+        * delete car
+
+        * get all users of car
+        * get all cars of any user
+        * add car to user
+        * remove car from user 
+*/
+
 module.exports = app;
