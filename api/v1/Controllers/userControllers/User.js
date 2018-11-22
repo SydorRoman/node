@@ -34,6 +34,7 @@ const login = async (req, res) => {
   let token;
   let user;
 
+ console.log(req.body);
   try {
     user = await User.findOne({ email: req.body.email });
 
@@ -41,6 +42,7 @@ const login = async (req, res) => {
     
     // console.log("req.body.password : " + req.body.password);
     // console.log(user + " user");
+
     const isOk = await user.comparePasswords(req.body.password);
 
     if (!isOk) {
@@ -59,8 +61,7 @@ const login = async (req, res) => {
     req.session.token = token;
     res.status(200).send({ token, user });
   } catch ({ message }) {
-    res.status(500);
-    res.send({ error: message });
+    res.status(500).send({ error: message });
   }
 };
 
@@ -74,7 +75,7 @@ const getAll = async (req, res) => {
 
   User.find({}, (err, result) => {
     if (err) {
-      res.send(err);
+      res.send({error: err});
     }
     res.send({ users: result, count: usersCount });
   });
@@ -83,9 +84,9 @@ const getAll = async (req, res) => {
 const getOne = (req, res) => {
   User.findById(req.params.id, (err, result) => {
     if (err) {
-      res.sendStatus(404);
+      res.sendStatus(404).send({message: messeges.NOT_FOUND})
     }
-    res.send(result);
+    res.send({result});
   });
 };
 
@@ -122,17 +123,13 @@ const deleteUser = (req, res) => {
     }
     Product.findOneAndRemove({userId: req.params.id,}, (error) => {
         if(error) { res.status(404).send({message: messeges.NOT_FOUND})};
-        console.log("Product deleted" + this.Product);
     });
-    res.send(messeges.DELETED_SUCCESSEFULLY);
+    res.send({message: messeges.DELETED_SUCCESSEFULLY});
   });
 };
 
 const updateUser = (req, res) => {
   if (req.body.password) delete req.body.password;
-  
-  if(!req.body.name) return res.status(422).send({ message: messeges.NAME_REQUIRED });
-  if(!req.body.email) return res.status(422).send({ message: messeges.EMAIL_REQUIRE });
 
 
         // Do smth with error =======> 
@@ -162,31 +159,24 @@ const changePassword = async (req, res) => {
 const getCars = (req,res) => {
     const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
     
-
     User.findById(decoded.user._id, (err,result) => {
         if (err) {
-            return res.json({
-                messege: messeges.NOT_FOUND,
-            });
+            return res.send({ messege: messeges.NOT_FOUND});
         }
     });
 
     refUserCar.find({userId: decoded.user._id} ,(err,result) => {
         if(err){
-            return res.json({
-                messege: messeges.NOT_FOUND, 
-            });
+            return res.send({ messege: messeges.NOT_FOUND});
         }
 
         const carsID =  result.map(el => el.carId);
 
         Car.find( { '_id': { $in: carsID }}, (error, resultCar ) => {
             if(error){
-                return res.json({
-                    messege: messeges.NOT_FOUND,
-                });
+                return res.send({ messege: messeges.NOT_FOUND});
             }
-            res.send(resultCar);
+            return res.send(resultCar);
         });
     });
 };
@@ -197,26 +187,20 @@ const getOneCar = (req,res) => {
 
     User.find({_id: decoded.user._id}, (err,result) => {
         if(err){
-            return res.json({
-                messege: messeges.NOT_FOUND,
-            });
+            return res.send({ messege: messeges.NOT_FOUND});
         }
     });
 
     refUserCar.find({userId: decoded.user._id, carId: req.params.id}, (err,result) => {
         if(err){
-            return res.json({
-                messege: messeges.NOT_FOUND,
-            });
+            return res.send({ messege: messeges.NOT_FOUND});
         }
 
         Car.findById(req.params.id, (error,data) => {
             if(error){
-                return res.json({
-                    messege: messeges.NOT_FOUND,
-                });
+                return res.send({ messege: messeges.NOT_FOUND});
             }
-            res.send(data);
+            return res.send(data);
         });
     });
 };
@@ -229,9 +213,9 @@ const addCar = (req,res) => {
 
     tempUser.save((err) => {
         if (err) {
-            res.status(400).send(err);
+            return res.status(400).send(err);
         }
-        res.status(200).send(tempUser);
+        return res.status(200).send(tempUser);
     });
 };
 
@@ -241,22 +225,16 @@ const deleteCar = (req,res) => {
 
     User.find({_id: decoded.user._id}, (err,result) => {
         if(err){
-            return res.json({
-                messege: messeges.NOT_FOUND,
-            });
+            return res.send({ messege: messeges.NOT_FOUND});
         }
     });
 
     refUserCar.findOneAndDelete({userId: decoded.user._id, carId: req.params.id}, (err,result) => {
 
         if(err){
-            return res.json({
-                messege: messeges.NOT_FOUND,
-            });
+            return res.send({ messege: messeges.NOT_FOUND});
         }
-        res.send({
-            messege: messeges.DELETED_SUCCESSEFULLY,
-        });
+        return res.send({ messege: messeges.DELETED_SUCCESSEFULLY });
 
     });
 };
@@ -264,11 +242,8 @@ const deleteCar = (req,res) => {
 module.exports = {
   getAll,
   getOne,
-  createUser,
   deleteUser,
   updateUser,
-  changePassword,
-  login,
   posts,
   getCars,
   getOneCar,

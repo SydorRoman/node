@@ -30,17 +30,21 @@ const getProducts = (req, res) => {
 
 const getOneProduct = (req, res) => {
   const { user } = req;
-  const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
-
-  Product.findOne({ _id: req.params.id }, (err, resultProduct) => {
-
-    if (err) return res.status(404).send(err);
-
+  
+  Product.findOne({ _id: req.params.id }, (error, resultProduct) => {
+    if (error) {
+      return res.status(404).send(error);
+    }
+    if (resultProduct === null) {
+      return res.status(404).send(error);
+    }
+    // console.log(resultProduct);
+    // console.log(user.user);
     if (JSON.stringify(resultProduct.userId) !== JSON.stringify(user.user._id)) {
       return res.status(403).send({ messege: messeges.PROHIBITED_PERMISSIOM });
     }
 
-    Product.findOne({ _id: req.params.id, userId: decoded.user._id }, (err, result) => {
+    Product.findOne({ _id: req.params.id, userId: user.user._id }, (err, result) => {
       if (err) {
         return res.send(err);
       }
@@ -50,24 +54,23 @@ const getOneProduct = (req, res) => {
 };
 
 const addProduct = (req, res) => {
-  const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
+  const  { user } = req;
 
   if (isNaN(req.body.price)) {
-    console.log("here")
     return res.status(400).send({ messege: messeges.WRONG_FORMAT });
   }
 
   const productTemp = new Product(req.body);
   if (!productTemp.productName) return res.status(422).send({ messege: messeges.NAME_REQUIRED });
 
-  productTemp.userId = decoded.user._id;
+  productTemp.userId = user.user._id;
 
 
   productTemp.save((err) => {
     if (err) {
       return res.status(400).send(err);
     } else {
-      res.status(201).send(productTemp);
+      return res.status(201).send(productTemp);
     }
   });
 };

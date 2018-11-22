@@ -23,6 +23,7 @@ const product = {
 let token = '123';
 
 let user;
+let tempUserId = 0;
 describe('Product', () => {
     before(async () => {
         user = new User({
@@ -30,14 +31,27 @@ describe('Product', () => {
             email: 'name@gmail.com',
             password: '$2b$10$LV5jHPplB5b0L5jmYUq4seZcGKE0yoZp9f2C7dPK1ciFrs6pCvVAa'
         })
-        await user.save((err) => {
+        await user.save((err, user) => {
             if (err) {
                 return err;
             }
+            // tempUserId = user._id;
         });
+        // const smth = {
+        //     email: user.email,
+        //     password: 'test'
+        // };
+
+        // await chai.request(server)
+        //     .post('/api/v1/users/login')
+        //     .send(smth)
+        //     .end((err, res) => {
+        //         console.log(res.body);
+        //     });
+        
         user.password = 'test';
         chai.request(server)
-            .post('/api/v1/users/login')
+            .post('/api/v1/auth/login')
             .send(user)
             .end((err, res) => {
                 token = res.body.token;
@@ -70,20 +84,36 @@ describe('Product', () => {
     });
 
     describe('/GET/:id product', () => {
-        it('it should GET a product by the given id', (done) => {
+        it('it should GET a product by the given id', async (done) => {
+            // get current user ID here
+            // set this ID as userId in product
+            
+            // chai.request(server)
+            // .post('/api/v1/users/login')
+            // .send({ email: user.email, password: 'test' })
+            // .end( (err, res) =>  {
+            //     if (err) console.log(err);
+            //      tempUserId = res.body.user._id;
+            //     console.log(tempUserId + ' 1');
+            // });
+            tempUserId = (await User.findOne({ email: user.email}))._id;
+
             const product = new Product({
                 productName: "name",
                 price: 100,
-                about: "about"
+                about: "about",
+                userId: tempUserId
             })
+            product.save((err, product) =>  {
             chai.request(server)
-            .get('/api/v1/products/' + product._id)
-            .set('Authorization', `Bearer ${token}`)
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.be.a('object');
-                done();
-            });
+                .get(`/api/v1/products/${product._id}`)
+                .set('Authorization', `Bearer ${token}`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    done();
+                });
+            }); 
         });
     });
 
@@ -118,7 +148,6 @@ describe('Product', () => {
                 .send(product)
                 .set('Authorization', `Bearer ${token}`)
                 .end((err, res) => {
-                    console.log(res.body);
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.property('productName');
@@ -142,7 +171,7 @@ describe('Product', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.should.have.property('text').eql('Deleted sucessefully')
+                    res.body.should.have.property('messege').eql('Deleted sucessefully')
                     done();
                 });
             });
@@ -193,7 +222,6 @@ describe('Product', () => {
                 .set('Authorization', `Bearer ${token}`)
                 .send(product)
                 .end((err, res) => {
-                    console.log(res.body);
                     res.should.have.status(201);
                     res.body.should.be.a('object');
                     res.body.should.have.property('productName');

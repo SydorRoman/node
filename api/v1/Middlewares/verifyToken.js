@@ -20,8 +20,8 @@ const verifyToken = async function (req, res, next) {
   //     req.state = {};
   //   }
     try {
-      const user = await jwt.verify(bearerToken, JWT_SECRET);
-      req.user = user;
+      const result = await jwt.verify(bearerToken, JWT_SECRET);
+      req.user = result;//.user;
       return next();
     } catch ({ message }) {
       res.status(500);
