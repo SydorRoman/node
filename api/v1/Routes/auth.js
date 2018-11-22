@@ -82,10 +82,10 @@ app.post('/registration', AuthController.registration);
 app.put('/changePassword/:id', AuthController.changePassword);
 
 /**
- * @api {put} http://localhost:8080/api/v1/auth/changePassword/:id Update User Password
+ * @api {put} http://localhost:8080/api/v1/auth/changeEmail/:id Update User Email
  * @apiGroup Auth
  * @apiParam {id} id User id
- * @apiName ChangePassword
+ * @apiName ChangeEmail
  * 
  * @apiParamExample {json} Input
  *   {
@@ -116,7 +116,7 @@ app.put('/changePassword/:id', AuthController.changePassword);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found
  */
-app.put('/changeLogin/:id', AuthController.changeEmail);
+app.put('/changeEmail/:id', AuthController.changeEmail);
 
 /**
  * @api {post} http://localhost:8080/api/v1/auth/login Login User

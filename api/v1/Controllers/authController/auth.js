@@ -3,9 +3,6 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 const hash = require('../../../helper/hashPassword');
-const Car = require('../../models/car');
-const refUserCar = require('../../models/refUserCar');
-const Product = require('../../models/product')
 
 const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
@@ -20,8 +17,7 @@ const parseJwt = token => token.split(' ')[1];
 const login = async (req, res) => {
     let token;
     let user;
-  
-   console.log(req.body);
+
     try {
       user = await User.findOne({ email: req.body.email });
   
@@ -88,9 +84,9 @@ const registration = async (req, res) => {
   };
 
 
-  const changeLogin = async (req, res) => {
+  const changeEmail = async (req, res) => {
 
-    User.findByIdAndUpdate(req.params.id, { password }, { new: true, runValidators: true })
+    User.findByIdAndUpdate(req.params.id, { email: req.body.email }, { new: true, runValidators: true })
       .exec()
       .then(userData => { res.status(200).send(userData)})
       .catch(err => res.status(404).send(err));
@@ -99,7 +95,7 @@ const registration = async (req, res) => {
 
   module.exports = {
       changePassword,
-      changeLogin,
+      changeEmail,
       login,
       registration,
   }
