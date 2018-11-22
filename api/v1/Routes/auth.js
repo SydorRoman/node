@@ -6,7 +6,7 @@ const middleWares = require('../middlewares/index');
 
 
 /**
- * @api {post} http://localhost:8080/api/auth/registration Register User
+ * @api {post} http://localhost:8080/api/v1/auth/registration Register User
  * @apiGroup User
  * @apiName Register User
  * 
@@ -42,7 +42,7 @@ const middleWares = require('../middlewares/index');
  *   }
  * 
  */
-app.post('/', AuthController.registration);
+app.post('/registration', AuthController.registration);
 
 /**
  * @api {put} http://localhost:8080/api/v1/auth/changePassword/:id Update User Password

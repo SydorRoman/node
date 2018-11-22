@@ -30,8 +30,14 @@ mongoose.connect(`mongodb://localhost:27017/${dbName}`,{ useNewUrlParser: true }
 
 app.use('/api/v1', Routes);
 
-app.listen(8080, () => {
-    console.log('Started at 8080.');
-});
+if(!module.parent) {
+    app.listen(8080, () => {
+        console.log('Started at 8080.');
+    });
+ }
+
+// app.listen(8080, () => {
+//     console.log('Started at 8080.');
+// });
 
 module.exports = app;
