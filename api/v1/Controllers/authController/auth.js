@@ -87,8 +87,19 @@ const registration = async (req, res) => {
       .catch(err => res.status(404).send(err));
   };
 
+
+  const changeLogin = async (req, res) => {
+
+    User.findByIdAndUpdate(req.params.id, { password }, { new: true, runValidators: true })
+      .exec()
+      .then(userData => { res.status(200).send(userData)})
+      .catch(err => res.status(404).send(err));
+
+  }
+
   module.exports = {
       changePassword,
+      changeLogin,
       login,
       registration,
   }
