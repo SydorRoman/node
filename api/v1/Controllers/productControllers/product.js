@@ -81,7 +81,7 @@ const deleteProduct = (req, res) => {
   Product.findOne({ _id: req.params.id }, (err, result) => {
     if (err) return res.status(404).send(err);
 
-    if (result.userId !== user._id) {
+    if (JSON.stringify(result.userId) !== JSON.stringify(user._id)) {
       return res.status(403).send({ messege: messeges.PROHIBITED_PERMISSIOM });
     }
     Product.findByIdAndRemove(req.params.id, (err) => {
