@@ -115,6 +115,31 @@ describe('User', () => {
         })
         user.save((err, user) =>  {
                 chai.request(server)
+                .put('/api/v1/auth/changeEmail/' + user._id)
+                .send({email: 'newEmail@gmail.com'})
+                .end( async (err, res) => {
+                    let tempUser = new User(res.body);
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('email');
+                  done();
+                });
+          });
+      });
+    });
+
+    describe('/PUT/:id user', () => {
+      it('it should UPDATE email of user by the id', (done) => {
+        let user  = new User({
+          name: 'name',
+          email: 'name@gmail.com',
+          phone: '(063)245-4444',
+          dateOfBirth: '2020-10-10T00:00:00.000Z',
+          about: 'Lalal lalal',
+          password: '$2b$10$LV5jHPplB5b0L5jmYUq4seZcGKE0yoZp9f2C7dPK1ciFrs6pCvVAa'
+        })
+        user.save((err, user) =>  {
+                chai.request(server)
                 .put('/api/v1/auth/changePassword/' + user._id)
                 .send({password: 'newPassword'})
                 .end( async (err, res) => {

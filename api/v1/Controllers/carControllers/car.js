@@ -8,6 +8,8 @@ const Car = require('../../models/car');
 const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
 
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

@@ -12,24 +12,15 @@ const verifyToken = async function (req, res, next) {
   }
   const bearer = bearerHeader.split(' ');
   const bearerToken = bearer[1];
-
- // console.log('session:\n', req.session.token);
-
-  // if (req.session.token === bearerToken) {
-  //   if (!req.state) {
-  //     req.state = {};
-  //   }
+  
     try {
       const result = await jwt.verify(bearerToken, JWT_SECRET);
-      req.user = result;//.user;
+      req.user = result.user;
       return next();
     } catch ({ message }) {
       res.status(500);
       return res.send({ message });
     }
-  // } else {
-  //   return res.sendStatus(403);
-  // }
 };
 
 exports.modules = { verifyToken };

@@ -17,7 +17,7 @@ const parseJwt = token => token.split(' ')[1];
 const getProducts = (req, res) => {
   const { user } = req;
 
-  Product.find({ userId: user.user._id }, (err, result) => {
+  Product.find({ userId: user._id }, (err, result) => {
     if (err) {
       return res.send({
         messege: messeges.LIST_EMPTY,
@@ -40,11 +40,11 @@ const getOneProduct = (req, res) => {
     }
     // console.log(resultProduct);
     // console.log(user.user);
-    if (JSON.stringify(resultProduct.userId) !== JSON.stringify(user.user._id)) {
+    if (JSON.stringify(resultProduct.userId) !== JSON.stringify(user._id)) {
       return res.status(403).send({ messege: messeges.PROHIBITED_PERMISSIOM });
     }
 
-    Product.findOne({ _id: req.params.id, userId: user.user._id }, (err, result) => {
+    Product.findOne({ _id: req.params.id, userId: user._id }, (err, result) => {
       if (err) {
         return res.send(err);
       }
@@ -63,7 +63,8 @@ const addProduct = (req, res) => {
   const productTemp = new Product(req.body);
   if (!productTemp.productName) return res.status(422).send({ messege: messeges.NAME_REQUIRED });
 
-  productTemp.userId = user.user._id;
+  console.log(user);
+  productTemp.userId = user._id;
 
 
   productTemp.save((err) => {
@@ -101,15 +102,10 @@ const editProduct = (req, res) => {
   }
 
   const tempUserId = user._id;
-  //const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
-  //const tempUserId = decoded.user._id;
-
   Product.find({ _id: req.params.id }, (err, resProduct) => {
+
     if (err) return res.status(404).send({ messege: messeges.NOT_FOUND });
 
-    if (resProduct.userId !== user._id) {
-      return res.status(403).send({ messege: messeges.PROHIBITED_PERMISSIOM });
-    }
     Product.findById(req.params.id, (err, result) => {
       if (err) {
         return res.send(messeges.NOT_FOUND);
@@ -119,14 +115,12 @@ const editProduct = (req, res) => {
           messege: messeges.PROHIBITED_PERMISSIOM,
         });
       }
-
+      Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      .exec()
+      .then(productTemp => res.status(200).send(productTemp))
+      .catch(err => res.status(404).send(err));
     });
   });
-
-  Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
-    .exec()
-    .then(productTemp => res.status(200).send(productTemp))
-    .catch(err => res.status(404).send(err));
 };
 
 module.exports = {

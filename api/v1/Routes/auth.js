@@ -161,4 +161,31 @@ app.put('/changeEmail/:id', AuthController.changeEmail);
  */
 app.post('/login', AuthController.login);
 
+
+/* @api {post} http://localhost:8080/api/v1/auth/logout Logout User
+ * @apiGroup Auth
+ * @apiName Logout User
+ * 
+ * @apiSuccessExample {json} Success
+ *   HTTP/1.1 200 ok
+ *   {
+ *      {
+ *          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+ *      }
+ *      {
+ *          "id": 1,
+ *          "name": "newName"
+ *          "email": "newEmail@gmail.com",
+ *          "phone": "(063)245-4444",
+ *          "dateOfBirth": "2019-12-12T00:00:00.000Z",
+ *          "about": "New Info...etc",
+ *          "password": "gsdyTv32khjs324da"
+ *      }
+ *   }
+ * 
+ * @apiErrorExample {json} User not found
+ *    HTTP/1.1 404 Not Found 
+ */
+app.get('/logout', middleWares.modules.verifyToken.modules.verifyToken ,AuthController.logout);
+
 module.exports = app;
