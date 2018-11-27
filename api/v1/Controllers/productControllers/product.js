@@ -16,7 +16,6 @@ const parseJwt = token => token.split(' ')[1];
 
 const getProducts = (req, res) => {
   const { user } = req;
-
   Product.find({ userId: user._id }, (err, result) => {
     if (err) {
       return res.send({

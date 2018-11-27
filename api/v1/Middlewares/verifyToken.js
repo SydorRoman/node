@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const messages = require('../../notification/notification');
 const { JWT_SECRET } = require('../../config/config');
 
-const verifyToken = async function (req, res, next) {
+exports.verifyToken = async function (req, res, next) {
   const bearerHeader = req.headers.authorization;
 
   if (!bearerHeader) {
@@ -23,4 +23,3 @@ const verifyToken = async function (req, res, next) {
     }
 };
 
-exports.modules = { verifyToken };

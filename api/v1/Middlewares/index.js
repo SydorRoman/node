@@ -1,5 +1,7 @@
-const verifyToken = require('./verifyToken');
+const { verifyToken } = require('./verifyToken');
+const { verifyRole }  = require('./permission');
 
-exports.modules = {
+module.exports = {
   verifyToken,
+  verifyRole,
 };

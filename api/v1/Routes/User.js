@@ -42,7 +42,7 @@ const middleWares = require('../middlewares/index');
  *    @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found
  */
-app.get('/', UserController.getAll);
+app.get('/', UserController.getAllUsers);
 
 /**
  * @api {get} http://localhost:8080/api/v1/users/:id Find a User
@@ -72,7 +72,7 @@ app.get('/', UserController.getAll);
  * }
 
  */
-app.get('/:id', UserController.getOne);
+app.get('/:id',  UserController.getOneUser);
 
 
 
@@ -132,14 +132,8 @@ app.delete('/:id', UserController.deleteUser);
  */
 app.put('/:id', UserController.updateUser);
 
-
-
-
-
-
-
 /**
- * @api {post} http://localhost:8080/api/v1/users/posts User post
+ * @api {post} http://localhost:8080/api/v1/users/posts User posts
  * @apiGroup User
  * @apiName Post User
  * 
@@ -155,90 +149,8 @@ app.put('/:id', UserController.updateUser);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found
  */
-app.post('/posts', middleWares.modules.verifyToken.modules.verifyToken, UserController.posts);
+app.post('/posts', middleWares.verifyToken, UserController.posts);
 
-
-/**
- * @api {post} http://localhost:8080/api/v1/user/car/:id Add Car for USer
- * @apiName post add car for User
- * @apiGroup User
- * @apiParam {id} id Id of reference between user and car
- * 
- * @apiSuccess {String} _id Id of reference between user and car
- * @apiSuccess {String} userID User id
- * @apiSuccess {String} carId Car id
- * 
- * apiSuccessExample {json} Success
- *   HTTP/1.1 200 ok
- *    {
- *      "_id" :"237462g6372fg",
- *      "userId": "89yucsdjh23",
- *      "carId": "fdsofbj"  
- *    }
- * @apiErrorExample {json} Task not found
- *    HTTP/1.1 404 Not Found 
- */
-app.post('car/:id', middleWares.modules.verifyToken.modules.verifyToken, UserController.addCar);
-
-/**
- * @api {get} http://localhost:8080/api/v1/user/car Get all Cars of User
- * @apiName get get user`s cars
- * @apiGroup  User
- * 
- * @apiSuccess {String} _id Id of the Car
- * @apiSuccess {String} model Model of the Car
- * 
- * @apiSuccessExample {json} Success
- *   HTTP/1.1 200 OK
- *   {
- *      "id" : 2,
- *      "model" : "AUDI"    
- *   }
- * 
- * @apiErrorExample {json} Task not found
- *    HTTP/1.1 404 Not Found 
- */
-app.get('car/', middleWares.modules.verifyToken.modules.verifyToken, UserController.getCars);
-
-/**
- * @api {get} http://localhost:8080/api/v1/user/car/:id Get one car of User
- * @apiName get user`s car
- * @apiGroup  User
- * @apiParam {id} id Id of reference between user and car
- * 
- * @apiSuccess {String} _id Id of the Car
- * @apiSuccess {String} model Model of the Car
- * 
- * @apiSuccessExample {json} Success
- *   HTTP/1.1 200 OK
- *   {
- *      "id" : 1,
- *      "model" : "AUDI"    
- *   }
- * @apiErrorExample {json} Task not found
- *    HTTP/1.1 404 Not Found  
- *
- */
-app.get('car/:id', middleWares.modules.verifyToken.modules.verifyToken, UserController.getOne);
-
-
-/**
- * @api {delete} http://localhost:8080/api/v1/user/car/:id Remove car from user
- * @apiName delete user`s car
- * @apiGroup User
- * @apiParam {id} id Id of reference between user and car
- * 
- * @apiSuccessExample {json} Success
- *   HTTP/1.1 200 OK
- *   {
- *      "messege": "deleted successfully"
- *   }
- * 
- * 
- * @apiErrorExample {json} Task not found
- *    HTTP/1.1 404 Not Found 
- */
-app.delete('car/:id', middleWares.modules.verifyToken.modules.verifyToken, UserController.deleteCar);
 
 
 module.exports = app;

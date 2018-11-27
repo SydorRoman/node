@@ -10,6 +10,7 @@ const values = {
   NAME_REQUIRED: 'Name is required',
   NAME_REQUIRED: 'Email is required',
   WRONG_FORMAT: 'wrong format',
+  SUCCESS: 'success'
 };
 
 module.exports = values;

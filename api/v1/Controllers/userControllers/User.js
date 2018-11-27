@@ -30,42 +30,9 @@ const posts = (req, res) => {
   });
 };
 
-const login = async (req, res) => {
-  let token;
-  let user;
 
- console.log(req.body);
-  try {
-    user = await User.findOne({ email: req.body.email });
 
-    if(!user) return res.status(404).send({ messege: messeges.NOT_FOUND });
-    
-    // console.log("req.body.password : " + req.body.password);
-    // console.log(user + " user");
-
-    const isOk = await user.comparePasswords(req.body.password);
-
-    if (!isOk) {
-      res.sendStatus(403);
-      res.send({ message: messeges.BAD_PASSWORD });
-    }
-
-    if (!user) {
-      res.status(404);
-      res.send({ error: messeges.NOT_FOUND });
-    }
-    token = await jwt.sign({ user }, JWT_SECRET, { expiresIn: 1000 * 60 * 60 * 24 * 365 });
-    if (!req.session) {
-      req.session = {};
-    }
-    req.session.token = token;
-    res.status(200).send({ token, user });
-  } catch ({ message }) {
-    res.status(500).send({ error: message });
-  }
-};
-
-const getAll = async (req, res) => {
+const getAllUsers = async (req, res) => {
   let usersCount;
   try {
     usersCount = await User.count({});
@@ -81,39 +48,16 @@ const getAll = async (req, res) => {
   });
 };
 
-const getOne = (req, res) => {
+const getOneUser = (req, res) => {
   User.findById(req.params.id, (err, result) => {
     if (err) {
-      res.sendStatus(404).send({message: messeges.NOT_FOUND})
+      res.status(404).send({message: messeges.NOT_FOUND})
     }
-    res.send({result});
+    res.status(200).send( result );
   });
 };
 
-const createUser = async (req, res) => {
 
-  if(!req.body.password) return res.status(422).send({ message: messeges.PASSWORD_REQUIRE });
-  if(!req.body.name) return res.status(422).send({ message: messeges.NAME_REQUIRED });
-  if(!req.body.email) return res.status(422).send({ message: messeges.EMAIL_REQUIRE });
-
-  const userT = new User(req.body);
-  const hashed = await hash.hashPass(userT.password);
-
-  userT.password = hashed;
-  let token;
-
-  userT.save((err) => {
-    if (err) {
-      return res.status(400).send(err); 
-    }
-    else{
-      token = jwt.sign({ userT }, JWT_SECRET, { expiresIn: 1000 * 60 * 60 * 24 * 365 });
-      req.session.token = token;
-      res.status(201).send({ token, userT });
-    }
-  });
-
-};
 
 const deleteUser = (req, res) => {
   User.findByIdAndRemove(req.params.id, (err) => {
@@ -141,22 +85,12 @@ const updateUser = (req, res) => {
     .catch(err => res.status(404).send(err));
 };
 
-const changePassword = async (req, res) => {
-
-
-  const password = await hash.hashPass(req.body.password);
-  User.findByIdAndUpdate(req.params.id, { password }, { new: true, runValidators: true })
-    .exec()
-    .then(userData => { res.status(200).send(userData) } )
-    .catch(err => res.status(404).send(err));
-};
-
-
 // reference betwwen User and Car
 
 
 
-const getCars = (req,res) => {
+const getUserCars = (req,res) => {
+
     const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
     
     User.findById(decoded.user._id, (err,result) => {
@@ -181,7 +115,7 @@ const getCars = (req,res) => {
     });
 };
 
-const getOneCar = (req,res) => {
+const getUserCar = (req,res) => {
 
     const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
 
@@ -193,9 +127,12 @@ const getOneCar = (req,res) => {
 
     refUserCar.find({userId: decoded.user._id, carId: req.params.id}, (err,result) => {
         if(err){
-            return res.send({ messege: messeges.NOT_FOUND});
+            return res.status(404).send({ messege: messeges.NOT_FOUND});
         }
-
+        if(result.length === 0)
+        {
+            return res.send({message: messeges.NOT_FOUND});
+        }
         Car.findById(req.params.id, (error,data) => {
             if(error){
                 return res.send({ messege: messeges.NOT_FOUND});
@@ -205,11 +142,13 @@ const getOneCar = (req,res) => {
     });
 };
 
-const addCar = (req,res) => {
+const addCarToUser = (req,res) => {
     
     const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
 
     const tempUser = new refUserCar({userId: decoded.user._id, carId: req.params.id});
+
+    console.log("here");
 
     tempUser.save((err) => {
         if (err) {
@@ -220,7 +159,7 @@ const addCar = (req,res) => {
 };
 
 
-const deleteCar = (req,res) => {
+const deleteCarFromUser = (req,res) => {
     const decoded = jwt.decode(parseJwt(req.headers.authorization), JWT_SECRET);
 
     User.find({_id: decoded.user._id}, (err,result) => {
@@ -239,15 +178,128 @@ const deleteCar = (req,res) => {
     });
 };
 
+//                      *** ADMIN ***
+
+const getAllUsersOfCar = (req,res) => {
+    Car.findById(req.params.id, (err,result) => {
+        if(err){
+            return res.send({ messege: messeges.NOT_FOUND});
+        };
+    });
+
+    refUserCar.findOne({carId: req.params.id}, (err,result) => {
+        if(err){
+            return res.send({ messege: messeges.NOT_FOUND});
+        };
+        
+        const userId =  result.map(el => el.userId);
+
+        User.find({ '_id': { $in: userId }}, (err,userData) => {
+            if(err){
+                return res.send({ messege: messeges.NOT_FOUND});
+            };
+            return res.send(userData);
+        });
+    });
+};
+
+const getAnyUserCars = (req,res) => {
+    
+    User.findById(req.params.id, (err,result) => {
+        if (err) {
+            return res.send({ messege: messeges.NOT_FOUND});
+        }
+    });
+
+    refUserCar.find({userId: req.params.id} ,(err,result) => {
+        if(err){
+            return res.send({ messege: messeges.NOT_FOUND });
+        }
+
+        const carsID =  result.map(el => el.carId);
+
+        Car.find( { '_id': { $in: carsID }}, (error, resultCar ) => {
+            if(error){
+                return res.send({ messege: messeges.NOT_FOUND});
+            }
+            return res.send(resultCar);
+        });
+    });
+};
+
+const addCarToUserAdmin = (req,res) => {
+
+    const tempUser = new refUserCar({userId: req.query.userId, carId: req.query.carId});
+
+    User.findById(req.query.userId, (err,result) => {
+        if (err) {
+            return res.send({ messege: messeges.NOT_FOUND});
+        }
+    });
+
+    Car.findById(req.query.carId, (err,result) => {
+        if (err) {
+            return res.send({ messege: messeges.NOT_FOUND});
+        }
+    });
+
+    tempUser.save((err) => {
+        if (err) {
+            return res.status(400).send(err);
+        }
+        return res.status(200).send({message: messeges.SUCCESS});
+    });
+};
+
+const deleteCarFromUserAdmin = (req,res) => {
+
+    User.findById(req.query.userId, (err,result) => {
+        if (err) {
+            return res.send({ messege: messeges.NOT_FOUND});
+        }
+    });
+
+    Car.findById(req.query.carId, (err,result) => {
+        if (err) {
+            return res.send({ messege: messeges.NOT_FOUND});
+        }
+    });
+    refUserCar.findOneAndDelete({userId: req.query.userId, carId: req.query.carId}, (err,result) => {
+        if(err){
+            return res.send({ messege: messeges.NOT_FOUND});
+        }
+        return res.send({ messege: messeges.DELETED_SUCCESSEFULLY });
+
+    });
+};
+
+
+/*                      *** FOR ADMIN ***
+        * add car
+        * update car
+        * delete car
+
+        * get all users of car
+        * get all cars of any user
+        * add car to user
+        * remove car from user 
+*/
+
 module.exports = {
-  getAll,
-  getOne,
+  getAllUsers,
+  getOneUser,
   deleteUser,
   updateUser,
   posts,
-  getCars,
-  getOneCar,
-  deleteCar,
-  addCar,
+
+  getUserCar,
+  getUserCars,
+  deleteCarFromUser,
+  addCarToUser,
+
+  getAllUsersOfCar,
+  getAnyUserCars,
+  addCarToUserAdmin,
+  deleteCarFromUserAdmin,
 
 };

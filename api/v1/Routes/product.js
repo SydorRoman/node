@@ -29,7 +29,7 @@ const middleWares = require('../middlewares/index');
  *    HTTP/1.1 404 Not Found 
  * 
  */
-app.get('/', middleWares.modules.verifyToken.modules.verifyToken, ProductController.getProducts);
+app.get('/', middleWares.verifyToken, ProductController.getProducts);
 
 /**
  * @api {post} http://localhost:8080/api/v1/products Create new product for User
@@ -61,7 +61,7 @@ app.get('/', middleWares.modules.verifyToken.modules.verifyToken, ProductControl
  *    }
  * 
  */
-app.post('/', middleWares.modules.verifyToken.modules.verifyToken, ProductController.addProduct);
+app.post('/', middleWares.verifyToken, ProductController.addProduct);
 
 /**
  * @api {delete} http://localhost:8080/api/v1/products/:id Delete Product of current User
@@ -78,7 +78,7 @@ app.post('/', middleWares.modules.verifyToken.modules.verifyToken, ProductContro
  * @apiErrorExample {json} Product not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductController.deleteProduct);
+app.delete('/:id', middleWares.verifyToken, ProductController.deleteProduct);
 
 /**
  * @api {put} http://localhost:8080/api/v1/products/:id Update Product of current User
@@ -114,7 +114,7 @@ app.delete('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductC
  * @apiErrorExample {json} Product not found
  *    HTTP/1.1 404 Not Found  
  */
-app.put('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductController.editProduct);
+app.put('/:id', middleWares.verifyToken, ProductController.editProduct);
 
 /**
  * @api {get} http://localhost:8080/api/v1/products/:id Get Product of current User
@@ -135,6 +135,6 @@ app.put('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductCont
  * @apiErrorExample {json} Product not found
  *    HTTP/1.1 404 Not Found 
  */
-app.get('/:id', middleWares.modules.verifyToken.modules.verifyToken, ProductController.getOneProduct);
+app.get('/:id', middleWares.verifyToken, ProductController.getOneProduct);
 
 module.exports = app;

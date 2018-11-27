@@ -186,6 +186,6 @@ app.post('/login', AuthController.login);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found 
  */
-app.get('/logout', middleWares.modules.verifyToken.modules.verifyToken ,AuthController.logout);
+app.get('/logout', middleWares.verifyToken ,AuthController.logout);
 
 module.exports = app;
