@@ -61,13 +61,13 @@ describe('User', () => {
             .send(user)
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.result.should.be.a('object');
-                res.body.result.should.have.property('name');
-                res.body.result.should.have.property('email');
-                res.body.result.should.have.property('password');
-                res.body.result.should.have.property('phone');
-                res.body.result.should.have.property('about');
-                res.body.result.should.have.property('dateOfBirth');
+                res.body.should.be.a('object');
+                res.body.should.have.property('name');
+                res.body.should.have.property('email');
+                res.body.should.have.property('password');
+                res.body.should.have.property('phone');
+                res.body.should.have.property('about');
+                res.body.should.have.property('dateOfBirth');
                // res.body.should.have.property('_id').eql(user._id);
               done();
               });

@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const carController = require('../controllers/carControllers/car');
 const middleWares = require('../middlewares/index');
-const UserController = require('../controllers/userControllers/user');
 
 
 //--------------CARS-----------
@@ -31,7 +30,7 @@ app.get('/', carController.getAllCars);
 /**
  * @api {get} http://localhost:8080/api/v1/cars/all Get all Cars of User
  * @apiName get get user`s cars
- * @apiGroup  User
+ * @apiGroup  Car
  * 
  * @apiSuccess {String} _id Id of the Car
  * @apiSuccess {String} model Model of the Car
@@ -43,15 +42,15 @@ app.get('/', carController.getAllCars);
  *      "model" : "AUDI"    
  *   }
  * 
- * @apiErrorExample {json} Task not found
+ * @apiErrorExample {json} Task not founds
  *    HTTP/1.1 404 Not Found 
  */
-app.get('/all', middleWares.verifyToken, UserController.getUserCars);
+app.get('/all', middleWares.verifyToken, carController.getUserCars);
 
 /**
  * @api {post} http://localhost:8080/api/v1/cars/add/:id Add Car for USer
  * @apiName post add car for User
- * @apiGroup User
+ * @apiGroup Car
  * @apiParam {id} id Id of reference between user and car
  * 
  * @apiSuccess {String} _id Id of reference between user and car
@@ -68,14 +67,14 @@ app.get('/all', middleWares.verifyToken, UserController.getUserCars);
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found 
  */
-app.post('/add/:id', middleWares.verifyToken, UserController.addCarToUser);
+app.post('/add/:id', middleWares.verifyToken, carController.addCarToUser);
 
 
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/one/:id Get one car of User
  * @apiName get user`s car
- * @apiGroup  User
+ * @apiGroup  Car
  * @apiParam {id} id Id of reference between user and car
  * 
  * @apiSuccess {String} _id Id of the Car
@@ -91,13 +90,13 @@ app.post('/add/:id', middleWares.verifyToken, UserController.addCarToUser);
  *    HTTP/1.1 404 Not Found  
  *
  */
-app.get('/one/:id', middleWares.verifyToken, UserController.getUserCar);
+app.get('/one/:id', middleWares.verifyToken, carController.getUserCar);
 
 
 /**
  * @api {delete} http://localhost:8080/api/v1/cars/remove/:id Remove car from user
  * @apiName delete user`s car
- * @apiGroup User
+ * @apiGroup Car
  * @apiParam {id} id Id of reference between user and car
  * 
  * @apiSuccessExample {json} Success
@@ -109,7 +108,7 @@ app.get('/one/:id', middleWares.verifyToken, UserController.getUserCar);
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('/remove/:id', middleWares.verifyToken, UserController.deleteCarFromUser);
+app.delete('/remove/:id', middleWares.verifyToken, carController.deleteCarFromUser);
 
 
 //                        ***  ADMIN  ***
@@ -173,7 +172,7 @@ app.put('/:id', middleWares.verifyRole, middleWares.verifyToken, carController.u
  * @apiErrorExample {json} Car not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('/:id', middleWares.verifyRole, middleWares.verifyToken, carController.updateCar)
+app.delete('/:id', middleWares.verifyRole, middleWares.verifyToken, carController.deleteCar)
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/admin/cars/:id Request All Users of Car (Admin)
@@ -202,7 +201,7 @@ app.delete('/:id', middleWares.verifyRole, middleWares.verifyToken, carControlle
  *    "password" : "gsdyTv32khjs324da"
  * }
  */
-app.get('admin/cars/:id', middleWares.verifyRole, middleWares.verifyToken, UserController.getAllUsersOfCar );
+app.get('/admin/cars/:id', middleWares.verifyRole, middleWares.verifyToken, carController.getAllUsersOfCar );
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/admin/users/:id Request All Cars of User (Admin)
@@ -221,7 +220,7 @@ app.get('admin/cars/:id', middleWares.verifyRole, middleWares.verifyToken, UserC
  *      "model": "Toyota"
  *   }
  */
-app.get('/admin/users/:id', middleWares.verifyRole, middleWares.verifyToken, UserController.getAnyUserCars);
+app.get('/admin/users/:id', middleWares.verifyRole, middleWares.verifyToken, carController.getAnyUserCars);
 
 
 /**
@@ -238,7 +237,7 @@ app.get('/admin/users/:id', middleWares.verifyRole, middleWares.verifyToken, Use
  *     "messege" : "success"
  *   }
  */
-app.post('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken, UserController.addCarToUserAdmin);
+app.post('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken, carController.addCarToUserAdmin);
 
 /**
  * @api {delete} http://localhost:8080/api/v1/cars/:userId/cars/:carId Remove Car from User (Admin)
@@ -254,6 +253,6 @@ app.post('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken
  *     "messege" : "deleted successfully"
  *   }
  */
-app.delete('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken, UserController.deleteCarFromUserAdmin);
+app.delete('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken, carController.deleteCarFromUserAdmin);
 
 module.exports = app;

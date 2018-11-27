@@ -86,6 +86,13 @@ const registration = async (req, res) => {
   
   const changePassword = async (req, res) => {
 
+    const { user } = req;
+
+    if(req.params.id !== user._id)
+    {
+      return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
+    }
+
     const password = await hash.hashPass(req.body.password);
     User.findByIdAndUpdate(
       req.params.id,
@@ -101,6 +108,13 @@ const registration = async (req, res) => {
 
 
   const changeEmail = async (req, res) => {
+
+    const { user } = req;
+
+    if(req.params.id !== user._id)
+    {
+      return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
+    }
 
     User.findByIdAndUpdate(
       req.params.id,

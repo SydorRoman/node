@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'test';
 let mongoose = require('mongoose');
 let Product = require('../v1/models/product');
 let User = require('../v1/models/user');
+const jwt = require('jsonwebtoken');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -10,6 +11,7 @@ const server = require('../../server');
 const should = chai.should();
 
 const hash = require('../helper/hashPassword');
+const { JWT_SECRET } = require('../config/config');
 
 chai.use(chaiHttp);
 
@@ -35,20 +37,8 @@ describe('Product', () => {
             if (err) {
                 return err;
             }
-            // tempUserId = user._id;
         });
-        // const smth = {
-        //     email: user.email,
-        //     password: 'test'
-        // };
-
-        // await chai.request(server)
-        //     .post('/api/v1/users/login')
-        //     .send(smth)
-        //     .end((err, res) => {
-        //         console.log(res.body);
-        //     });
-        
+    
         user.password = 'test';
         chai.request(server)
             .post('/api/v1/auth/login')
@@ -85,17 +75,7 @@ describe('Product', () => {
 
     describe('/GET/:id product', () => {
         it('it should GET a product by the given id', async (done) => {
-            // get current user ID here
-            // set this ID as userId in product
-            
-            // chai.request(server)
-            // .post('/api/v1/users/login')
-            // .send({ email: user.email, password: 'test' })
-            // .end( (err, res) =>  {
-            //     if (err) console.log(err);
-            //      tempUserId = res.body.user._id;
-            //     console.log(tempUserId + ' 1');
-            // });
+
             tempUserId = (await User.findOne({ email: user.email}))._id;
 
             const product = new Product({
@@ -137,10 +117,13 @@ describe('Product', () => {
                 });
         });
         it('it should UPDATE product by the id', (done) => {
+
         const product = new Product({
             productName: "name",
             price: 100,
-            about: "about"
+            about: "about",
+            userId: jwt.decode(token,JWT_SECRET).user._id
+           
         })
         product.save((err, product) =>  {
                 chai.request(server)
@@ -162,7 +145,8 @@ describe('Product', () => {
             const product = new Product({
                 productName: "name",
                 price: 100,
-                about: "about"
+                about: "about",
+                 userId: jwt.decode(token,JWT_SECRET).user._id
             })
             product.save((err, product) => {
                 chai.request(server)

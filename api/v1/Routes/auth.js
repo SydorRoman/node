@@ -79,7 +79,7 @@ app.post('/registration', AuthController.registration);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found
  */
-app.put('/changePassword/:id', AuthController.changePassword);
+app.put('/changePassword/:id', middleWares.verifyToken, AuthController.changePassword);
 
 /**
  * @api {put} http://localhost:8080/api/v1/auth/changeEmail/:id Update User Email
@@ -116,7 +116,7 @@ app.put('/changePassword/:id', AuthController.changePassword);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found
  */
-app.put('/changeEmail/:id', AuthController.changeEmail);
+app.put('/changeEmail/:id', middleWares.verifyToken, AuthController.changeEmail);
 
 /**
  * @api {post} http://localhost:8080/api/v1/auth/login Login User

@@ -2,16 +2,12 @@ const bodyParser = require('body-parser');
 const express = require('express');
 
 const app = express();
-const jwt = require('jsonwebtoken');
 const Product = require('../../models/product');
 
-const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-const parseJwt = token => token.split(' ')[1];
 
 
 const getProducts = (req, res) => {
@@ -62,7 +58,6 @@ const addProduct = (req, res) => {
   const productTemp = new Product(req.body);
   if (!productTemp.productName) return res.status(422).send({ messege: messeges.NAME_REQUIRED });
 
-  console.log(user);
   productTemp.userId = user._id;
 
 

@@ -88,8 +88,7 @@ app.get('/:id',  UserController.getOneUser);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found
  */
-app.delete('/:id', UserController.deleteUser);
-
+app.delete('/:id', middleWares.verifyToken, UserController.deleteUser);
 
 /**
  * @api {put} http://localhost:8080/api/v1/users/:id Update User
@@ -130,7 +129,7 @@ app.delete('/:id', UserController.deleteUser);
  * @apiErrorExample {json} User not found
  *    HTTP/1.1 404 Not Found 
  */
-app.put('/:id', UserController.updateUser);
+app.put('/:id', middleWares.verifyToken ,UserController.updateUser);
 
 /**
  * @api {post} http://localhost:8080/api/v1/users/posts User posts

@@ -8,7 +8,6 @@ exports.verifyRole = async (req,res,next) => {
 
     const decoded =  jwt.decode(token, JWT_SECRET);
     const role = decoded.user.role;
-    console.log(role);
     if (role === 'ADMIN') {
         next();
     } else {
