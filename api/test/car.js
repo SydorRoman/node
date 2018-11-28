@@ -74,7 +74,7 @@ describe('Car', () => {
         });
     });
 
-    describe('/GET all cars', () => {
+    describe('/GET all cars of user', () => {
         it('it should GET all cars of user', (done) => {
             chai.request(server)
                 .get('/api/v1/cars/all')
@@ -87,7 +87,7 @@ describe('Car', () => {
         });
     });
 
-    describe('/GET one car', () => {
+    describe('/GET one car of user', () => {
         it('it should GET one car of user', (done) => {
             car.save((err, car) => {
                 refUserCar = new RefUserCar({
@@ -130,7 +130,7 @@ describe('Car', () => {
         });
     });
 
-    describe('/DELETE car to user', () => {
+    describe('/DELETE car from user', () => {
         it('it should DELETE car from user', (done) => {
             car.save((err, car) => {
                 refUserCar = new RefUserCar({
@@ -171,7 +171,6 @@ describe('Car', () => {
     describe('/DELETE delete car (ADMIN)', () => {
         it('it should DELETE car (ADMIN)', (done) => {
             car.save((err, car) => {
-                console.log('DELETE :: car :: ', car);
                 chai.request(server)
                     .delete('/api/v1/cars/' + car._id)
                     .set('Authorization', `Bearer ${token}`)
@@ -185,7 +184,6 @@ describe('Car', () => {
         });
     });
 
-
     describe('/PUT put car (ADMIN)', () => {
         it('it should PUT car (ADMIN)', async (done) => {
             const newCar = await Car.create({ model: 'MMM' });
@@ -194,9 +192,6 @@ describe('Car', () => {
                 .set('Authorization', `Bearer ${token}`)
                 .send({ model: 'new' })
                 .end((err, res) => {
-                    if (err) {
-                        console.log('car:test :: ', err.message);
-                    }
                     res.should.have.status(200);
                     res.body.should.have.property('model');
                     done();
@@ -204,7 +199,68 @@ describe('Car', () => {
         });
     });
 
-    
+    describe('/GET all cars of user (ADMIN)', () => {
+        it('it should GET all cars of user (ADMIN)', async (done) => {
+            const TempCar = await Car.create({ model: 'userCar' });
+            const newUser = await User.create({ name: 'UserName', email: 'UserEmail@gmail.com', password: '123' });
+            const ref = await RefUserCar.create({userId: newUser._id, carId: TempCar._id});
+            chai.request(server)
+                .get('/api/v1/cars/admin/users/' + newUser._id)
+                .set('Authorization', `Bearer ${token}`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    done();
+                });
+        });
+    });
 
+    describe('/GET all users of car (ADMIN)', () => {
+        it('it should GET all users of car (ADMIN)', async (done) => {
+            const tempCar = await Car.create({ model: 'userCar' });
+            const newUser = await User.create({ name: 'userName', email: 'userEmail@gmail.com', password: '123' });
+            const ref = await RefUserCar.create({userId: newUser._id, carId: tempCar._id});
+            chai.request(server)
+                .get('/api/v1/cars/admin/cars/' + tempCar._id)
+                .set('Authorization', `Bearer ${token}`)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('array');
+                    done();
+                });
+        });
+    });
+
+    describe('/POST add car to user (ADMIN)', () => {
+        it('it should POST add car to user (ADMIN)', async (done) => {
+            const carTemp = await Car.create({ model: 'userCar' });
+            const userTemp = await User.create({ name: 'userName', email: 'userTemp@gmail.com', password: '123' });
+                chai.request(server)
+                    .post(`/api/v1/cars/${userTemp._id}/cars/${carTemp._id}`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .end((err, res) => {
+                        console.log(res.body);
+                        res.should.have.status(200);
+                        res.body.should.have.property('messege').eql('success');
+                        done();
+                    });
+        });
+    });
+
+    describe('/DELETE delete car from user (ADMIN)', () => {
+        it('it should DELETE delete car from user (ADMIN)', async (done) => {
+            const carTemp = await Car.create({ model: 'userCar' });
+            const userTemp = await User.create({ name: 'userName', email: 'userTemp1@gmail.com', password: '123' });
+                chai.request(server)
+                    .delete(`/api/v1/cars/${userTemp._id}/cars/${carTemp._id}`)
+                    .set('Authorization', `Bearer ${token}`)
+                    .end((err, res) => {
+                        console.log(res.body);
+                        res.should.have.status(200);
+                        res.body.should.have.property('messege').eql('Deleted sucessefully');
+                        done();
+                    });
+        });
+    });
 
 });

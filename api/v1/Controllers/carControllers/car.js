@@ -218,10 +218,10 @@ const getAnyUserCars = (req,res) => {
         });
     });
 };
-//adminc
+//admin
 const addCarToUserAdmin = (req,res) => {
 
-    const tempUser = new refUserCar({userId: req.params.userId, carId: req.params.carId});
+    const tempRef = new refUserCar({userId: req.params.userId, carId: req.params.carId});
 
     User.findById(req.params.userId, (err,result) => {
         if (err) {
@@ -234,11 +234,11 @@ const addCarToUserAdmin = (req,res) => {
             return res.send({ messege: messeges.NOT_FOUND});
         }
     });
-    tempUser.save((err) => {
+    tempRef.save((err) => {
         if (err) {
             return res.status(400).send(err);
         }
-        return res.status(200).send({message: messeges.SUCCESS});
+        return res.status(200).send({messege: messeges.SUCCESS});
     });
 };
 //admin
