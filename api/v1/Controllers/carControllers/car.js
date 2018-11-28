@@ -28,8 +28,10 @@ const getAllCars = (req,res) => {
 //admin
 const createCar = (req,res) => {
 
+    if (req.body._id) delete req.body._id;
     const car = new Car(req.body);
 
+    
     car.save((err) => {
         if (err) {
             return res.send(err)
@@ -45,8 +47,9 @@ const updateCar = (req,res) => {
 
     const carModel = req.body.model;
 
-    Car.findByIdAndUpdate(
-        req.params.id,
+   
+    Car.findOneAndUpdate(
+        { _id: req.params.id},
         { model: carModel },
         { new: true,  runValidators: true}
     )
@@ -54,13 +57,17 @@ const updateCar = (req,res) => {
     .then((car) => {
         res.status(200).send(car);
     })
-    .catch((err) => res.status(404).send(err));
+    .catch((err) => {
+        res.status(404).send(err)
+    });
 
 };
 
 //admin
 const deleteCar = (req, res) => { // delete reference
-    
+
+
+
     Car.findByIdAndDelete(req.params.id, (err,result) => {
         if(err){
             return res.send({ messege: messeges.NOT_FOUND});

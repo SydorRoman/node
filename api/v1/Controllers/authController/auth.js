@@ -75,10 +75,10 @@ const registration = async (req, res) => {
   
     userT.save((err) => {
       if (err) {
+        console.log(err);
         return res.status(400).send(err); 
       }
       else{
-  
         res.status(201).send({ userT });
       }
     });
@@ -116,8 +116,8 @@ const registration = async (req, res) => {
       return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
     }
 
-    User.findByIdAndUpdate(
-      req.params.id,
+    User.findOneAndUpdate(
+      { _id: req.params.id},
       { email: req.body.email },
       { new: true, runValidators: true },
     )

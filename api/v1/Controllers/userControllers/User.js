@@ -59,9 +59,9 @@ const getOneUser = (req, res) => {
 const deleteUser = (req, res) => {
 
   const { user } = req;
-
+  
   if(req.params.id !== user._id)
-  {
+  { 
     return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
   }
 
@@ -82,6 +82,7 @@ const updateUser = (req, res) => {
 
   const { user } = req;
 
+
   if(req.params.id !== user._id)
   {
     return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
@@ -89,7 +90,7 @@ const updateUser = (req, res) => {
 
   User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
     .exec()
-    .then(userData => res.status(200).send(userData))
+    .then(userData => { res.status(200).send(userData)})
     .catch(err => res.status(404).send(err));
 };
 
