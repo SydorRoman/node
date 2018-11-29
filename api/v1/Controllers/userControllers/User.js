@@ -7,28 +7,6 @@ const Product = require('../../models/product')
 const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
 
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-
-const parseJwt = token => token.split(' ')[1];
-
-const posts = (req, res) => {
-  jwt.verify(req.token, JWT_SECRET, (err, authData) => {
-    if (authData) {
-      res.sendStatus(403);
-    } else {
-      res.json({
-        message: messeges.POST_CREATED,
-        authData,
-      });
-    }
-  });
-};
-
-
-
 const getAllUsers = async (req, res) => {
   let usersCount;
   try {
@@ -60,10 +38,7 @@ const deleteUser = (req, res) => {
 
   const { user } = req;
   
-  if(req.params.id !== user._id)
-  { 
-    return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
-  }
+  if(req.params.id !== user._id) return res.status(403).send({message: messeges.PROHIBITED_PERMISSION});
 
   User.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
@@ -82,11 +57,7 @@ const updateUser = (req, res) => {
 
   const { user } = req;
 
-
-  if(req.params.id !== user._id)
-  {
-    return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
-  }
+  if(req.params.id !== user._id) return res.status(403).send({message: messeges.PROHIBITED_PERMISSION});
 
   User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
     .exec()
@@ -119,17 +90,17 @@ const listOfBanned = (req,res) => {
 
 const hardBan = (req,res) => {
   User.findOneAndDelete({_id: req.params.id}, (err) => {
-    if(err){
-      return res.status(404).send({message: messeges.NOT_FOUND})
-    }
+    if(err) return res.status(404).send({message: messeges.NOT_FOUND});
+    
     return res.status(200).send()
-  })
-}
+    
+  });
+};
+
 
 module.exports = {
   getAllUsers,
   getOneUser,
   deleteUser,
   updateUser,
-  posts
 };

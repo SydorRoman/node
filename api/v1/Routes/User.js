@@ -131,25 +131,4 @@ app.delete('/:id', middleWares.verifyToken, UserController.deleteUser);
  */
 app.put('/:id', middleWares.verifyToken ,UserController.updateUser);
 
-/**
- * @api {post} http://localhost:8080/api/v1/users/posts User posts
- * @apiGroup User
- * @apiName Post User
- * 
- * @apiSuccess {String} messege Post Created
- * 
- * @apiSuccessExample {json} Success
- *   HTPP/1.1 200 ok
- *   {
- *       "message": "post created"
- *   }
- * 
- * 
- * @apiErrorExample {json} User not found
- *    HTTP/1.1 404 Not Found
- */
-app.post('/posts', middleWares.verifyToken, UserController.posts);
-
-
-
 module.exports = app;

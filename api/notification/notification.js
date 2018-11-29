@@ -5,7 +5,7 @@ const values = {
   BAD_PASSWORD: 'Bad password',
   LIST_EMPTY: 'List empty',
   FORBIDDEN: 'Forbidden',
-  PROHIBITED_PERMISSIOM: 'Prohibited promission',
+  PROHIBITED_PERMISSION: 'Prohibited promission',
   PASSWORD_REQUIRED: 'Password is required',
   NAME_REQUIRED: 'Name is required',
   NAME_REQUIRED: 'Email is required',

@@ -10,6 +10,6 @@ exports.isBanned = async (req,res,next) => {
     if (!ban) {
         next();
     } else {
-        return res.status(403).send({messege: messege.PROHIBITED_PERMISSIOM});
+        return res.status(403).send({messege: messege.PROHIBITED_PERMISSION});
     }
 }

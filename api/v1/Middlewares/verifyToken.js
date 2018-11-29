@@ -19,7 +19,7 @@ exports.verifyToken = async function (req, res, next) {
       return next();
     } catch ({ message }) {
       res.status(500);
-      return res.send({ message });
+      return res.send({ error : message });
     }
 };
 

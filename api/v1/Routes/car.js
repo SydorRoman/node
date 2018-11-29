@@ -130,7 +130,7 @@ app.delete('/remove/:id', middleWares.verifyToken, carController.deleteCarFromUs
  *      "model": "TOYOTA"
  *   }
  */
-app.post('/', middleWares.verifyRole, middleWares.verifyToken, carController.createCar)
+app.post('/', middleWares.isAdmin, carController.createCar)
 
 /**
  * @api {put} http://localhost:8080/api/v1/cars/:id Update car
@@ -154,7 +154,7 @@ app.post('/', middleWares.verifyRole, middleWares.verifyToken, carController.cre
  *      "model": "Toyota"
  *   }
  */
-app.put('/:id', middleWares.verifyRole, middleWares.verifyToken, carController.updateCar)
+app.put('/:id', middleWares.isAdmin, carController.updateCar)
 
 
 /**
@@ -172,7 +172,7 @@ app.put('/:id', middleWares.verifyRole, middleWares.verifyToken, carController.u
  * @apiErrorExample {json} Car not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('/:id', middleWares.verifyRole, middleWares.verifyToken, carController.deleteCar)
+app.delete('/:id',middleWares.isAdmin, carController.deleteCar)
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/admin/cars/:id Request All Users of Car (Admin)
@@ -201,7 +201,7 @@ app.delete('/:id', middleWares.verifyRole, middleWares.verifyToken, carControlle
  *    "password" : "gsdyTv32khjs324da"
  * }
  */
-app.get('/admin/cars/:id', middleWares.verifyRole, middleWares.verifyToken, carController.getAllUsersOfCar );
+app.get('/admin/cars/:id', middleWares.isAdmin, carController.getAllUsersOfCar );
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/admin/users/:id Request All Cars of User (Admin)
@@ -220,7 +220,7 @@ app.get('/admin/cars/:id', middleWares.verifyRole, middleWares.verifyToken, carC
  *      "model": "Toyota"
  *   }
  */
-app.get('/admin/users/:id', middleWares.verifyRole, middleWares.verifyToken, carController.getAnyUserCars);
+app.get('/admin/users/:id', middleWares.isAdmin, carController.getAnyUserCars);
 
 
 /**
@@ -237,7 +237,7 @@ app.get('/admin/users/:id', middleWares.verifyRole, middleWares.verifyToken, car
  *     "messege" : "success"
  *   }
  */
-app.post('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken, carController.addCarToUserAdmin);
+app.post('/:userId/cars/:carId', middleWares.isAdmin, carController.addCarToUserAdmin);
 
 /**
  * @api {delete} http://localhost:8080/api/v1/cars/:userId/cars/:carId Remove Car from User (Admin)
@@ -253,6 +253,6 @@ app.post('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken
  *     "messege" : "deleted successfully"
  *   }
  */
-app.delete('/:userId/cars/:carId', middleWares.verifyRole, middleWares.verifyToken, carController.deleteCarFromUserAdmin);
+app.delete('/:userId/cars/:carId', middleWares.isAdmin, carController.deleteCarFromUserAdmin);
 
 module.exports = app;

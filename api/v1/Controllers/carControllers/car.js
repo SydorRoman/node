@@ -10,11 +10,6 @@ const refUserCar = require('../../models/refUserCar');
 const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
 
-
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 const getAllCars = (req,res) => {
 
     Car.find({}, (err, result) => {
@@ -30,7 +25,6 @@ const createCar = (req,res) => {
 
     if (req.body._id) delete req.body._id;
     const car = new Car(req.body);
-
     
     car.save((err) => {
         if (err) {
@@ -47,7 +41,6 @@ const updateCar = (req,res) => {
 
     const carModel = req.body.model;
 
-   
     Car.findOneAndUpdate(
         { _id: req.params.id},
         { model: carModel },
@@ -65,8 +58,6 @@ const updateCar = (req,res) => {
 
 //admin
 const deleteCar = (req, res) => { // delete reference
-
-
 
     Car.findByIdAndDelete(req.params.id, (err,result) => {
         if(err){
@@ -117,7 +108,7 @@ const getUserCar = (req,res) => {
         if(err){
             return res.status(404).send({ messege: messeges.NOT_FOUND});
         }
-        if(result.length === 0)
+        if(!result.length)
         {
             return res.send({message: messeges.NOT_FOUND});
         }
@@ -130,13 +121,11 @@ const getUserCar = (req,res) => {
     });
 };
 
-
 const addCarToUser = (req,res) => {
     
     const { user } = req;
 
     const tempUser = new refUserCar({userId: user._id, carId: req.params.id});
-
 
     tempUser.save((err) => {
         if (err) {

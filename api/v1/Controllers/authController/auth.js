@@ -7,10 +7,6 @@ const hash = require('../../../helper/hashPassword');
 const { JWT_SECRET } = require('../../../config/config') || {};
 const messeges = require('../../../notification/notification');
 
-const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 const login = async (req, res) => {
     let token;
     let user;
@@ -25,14 +21,13 @@ const login = async (req, res) => {
       }
   
       if (user.isBanned) {
-        return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
+        return res.status(403).send({message: messeges.PROHIBITED_PERMISSION});
       }
 
       const isOk = await user.comparePasswords(req.body.password);
   
       if (!isOk) {
-        res.sendStatus(403);
-        res.send({ message: messeges.BAD_PASSWORD });
+        res.sendStatus(403).send({ message: messeges.BAD_PASSWORD });
       }
   
       if (!user) {
@@ -72,9 +67,7 @@ const registration = async (req, res) => {
     }
   
     const userT = new User(req.body);
-    const hashed = await hash.hashPass(userT.password);
-  
-    userT.password = hashed;
+    userT.password = await hash.hashPass(userT.password);
     
   
     userT.save((err) => {
@@ -92,10 +85,8 @@ const registration = async (req, res) => {
 
     const { user } = req;
 
-    if(req.params.id !== user._id)
-    {
-      return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
-    }
+    if(req.params.id !== user._id) return res.status(403).send({message: messeges.PROHIBITED_PERMISSION});
+    
 
     const password = await hash.hashPass(req.body.password);
     User.findByIdAndUpdate(
@@ -115,10 +106,7 @@ const registration = async (req, res) => {
 
     const { user } = req;
 
-    if(req.params.id !== user._id)
-    {
-      return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
-    }
+    if(req.params.id !== user._id) return res.status(403).send({message: messeges.PROHIBITED_PERMISSION});
 
     User.findOneAndUpdate(
       { _id: req.params.id},
