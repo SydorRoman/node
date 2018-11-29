@@ -6,7 +6,7 @@ const carSchema = Schema({
 
     model: {
         type: String,
-        require: true
+        require: true  // reauire or required? Be attentive...
     },
 });
 

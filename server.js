@@ -8,6 +8,7 @@ const app = express();
   
 mongoose.Promise = global.Promise;
 
+// u have DBs in config why dont use? 
 let dbName = 'userdb';
 if (process.env.NODE_ENV === 'test') dbName = 'testUserdb';
 
@@ -21,16 +22,16 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true}));
 
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'keyboard cat', // move to config
     resave: false,
     saveUninitialized: true
   }));
   
-mongoose.connect(`mongodb://localhost:27017/${dbName}`,{ useNewUrlParser: true });
+mongoose.connect(`mongodb://localhost:27017/${dbName}`,{ useNewUrlParser: true }); // move to config
 
 app.use('/api/v1', Routes);
 
-if(!module.parent) {
+if(!module.parent) { // spaces after 'if' statement
     app.listen(8080, () => {
         console.log('Started at 8080.');
     });

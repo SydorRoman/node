@@ -20,7 +20,7 @@ const productScheme = new Schema({
   },
 });
 
-productScheme.methods.searchByUserID = function (userId) {
+productScheme.methods.searchByUserID = function (userId) { // no 'function'  () => {}
   return this.model('Product').find({ userId });
 };
 

@@ -30,7 +30,7 @@ const getOneProduct = (req, res) => {
     if (error) {
       return res.status(404).send(error);
     }
-    if (resultProduct === null) {
+    if (resultProduct === null) {  // if (!resultProduct)
       return res.status(404).send(error);
     }
     // console.log(resultProduct);

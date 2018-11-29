@@ -10,6 +10,6 @@ exports.verifyRole = async (req,res,next) => {
     if (role === 'ADMIN') {
         next();
     } else {
-        return res.status(403).send({messege: messege.PROHIBITED_PERMISSIOM});
+        return res.status(403).send({messege: messege.PROHIBITED_PERMISSIOM}); // M => N
     }
 }

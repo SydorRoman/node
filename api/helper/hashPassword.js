@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const SALT_WORK_FACTOR = 10;
+const SALT_WORK_FACTOR = 10; // value to config
 
 function hashPass(password) {
   return new Promise((resolve, reject) => {

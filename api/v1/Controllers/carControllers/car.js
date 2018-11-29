@@ -12,8 +12,8 @@ const messeges = require('../../../notification/notification');
 
 
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // remove
+app.use(bodyParser.urlencoded({ extended: true })); // remove
 
 const getAllCars = (req,res) => {
 
@@ -31,7 +31,7 @@ const createCar = (req,res) => {
     if (req.body._id) delete req.body._id;
     const car = new Car(req.body);
 
-    
+    //
     car.save((err) => {
         if (err) {
             return res.send(err)
@@ -47,7 +47,7 @@ const updateCar = (req,res) => {
 
     const carModel = req.body.model;
 
-   
+   //
     Car.findOneAndUpdate(
         { _id: req.params.id},
         { model: carModel },
@@ -66,8 +66,8 @@ const updateCar = (req,res) => {
 //admin
 const deleteCar = (req, res) => { // delete reference
 
-
-
+//
+//
     Car.findByIdAndDelete(req.params.id, (err,result) => {
         if(err){
             return res.send({ messege: messeges.NOT_FOUND});
@@ -95,7 +95,7 @@ const getUserCars = (req,res) => {
         const carsID =  result.map(el => el.carId);
 
         Car.find( { '_id': { $in: carsID }}, (error, resultCar ) => {
-            if(error){
+            if (error) {
                 return res.send({ messege: messeges.NOT_FOUND});
             }
             return res.send(resultCar);
@@ -117,7 +117,7 @@ const getUserCar = (req,res) => {
         if(err){
             return res.status(404).send({ messege: messeges.NOT_FOUND});
         }
-        if(result.length === 0)
+        if(result.length === 0) // if (!result.length)
         {
             return res.send({message: messeges.NOT_FOUND});
         }
@@ -162,8 +162,7 @@ const deleteCarFromUser = (req,res) => {
         if(err){
             return res.send({ messege: messeges.NOT_FOUND});
         }
-        if(!result)
-        {
+        if(!result) {
             return res.send({ messege: messeges.NOT_FOUND});
         }
         return res.send({ messege: messeges.DELETED_SUCCESSEFULLY });
@@ -279,5 +278,5 @@ module.exports = {
     getAnyUserCars,
     addCarToUserAdmin,
     deleteCarFromUserAdmin,
-
+//
 };

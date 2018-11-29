@@ -90,7 +90,7 @@ app.post('/add/:id', middleWares.verifyToken, carController.addCarToUser);
  *    HTTP/1.1 404 Not Found  
  *
  */
-app.get('/one/:id', middleWares.verifyToken, carController.getUserCar);
+app.get('/one/:id', middleWares.verifyToken, carController.getUserCar); // no need 'one'
 
 
 /**
@@ -108,7 +108,7 @@ app.get('/one/:id', middleWares.verifyToken, carController.getUserCar);
  * @apiErrorExample {json} Task not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('/remove/:id', middleWares.verifyToken, carController.deleteCarFromUser);
+app.delete('/remove/:id', middleWares.verifyToken, carController.deleteCarFromUser); // no need 'remove'
 
 
 //                        ***  ADMIN  ***
@@ -202,6 +202,8 @@ app.delete('/:id', middleWares.verifyRole, middleWares.verifyToken, carControlle
  * }
  */
 app.get('/admin/cars/:id', middleWares.verifyRole, middleWares.verifyToken, carController.getAllUsersOfCar );
+// remove 'admin' word from route
+// make one middleware method instead of two  smth like 'checkAdmin' or 'ifAdmin'
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/admin/users/:id Request All Cars of User (Admin)

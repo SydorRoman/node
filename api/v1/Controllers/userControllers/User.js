@@ -8,7 +8,7 @@ const { JWT_SECRET } = require('../../../config/config');
 const messeges = require('../../../notification/notification');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // remove this
 app.use(bodyParser.urlencoded({ extended: true }));
 
 

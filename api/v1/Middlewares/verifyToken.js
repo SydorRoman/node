@@ -17,7 +17,7 @@ exports.verifyToken = async function (req, res, next) {
       const result = await jwt.verify(bearerToken, JWT_SECRET);
       req.user = result.user;
       return next();
-    } catch ({ message }) {
+    } catch ({ message }) { // make this message user-friendly
       res.status(500);
       return res.send({ message });
     }

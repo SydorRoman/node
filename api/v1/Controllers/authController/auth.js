@@ -8,8 +8,8 @@ const { JWT_SECRET } = require('../../../config/config') || {};
 const messeges = require('../../../notification/notification');
 
 const app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json()); // remove
+app.use(bodyParser.urlencoded({ extended: true })); // remove
 
 const login = async (req, res) => {
     let token;
@@ -27,6 +27,7 @@ const login = async (req, res) => {
       const isOk = await user.comparePasswords(req.body.password);
   
       if (!isOk) {
+        // does it work?  make like res.status(403).send({ message: 'someText' });
         res.sendStatus(403);
         res.send({ message: messeges.BAD_PASSWORD });
       }
@@ -69,13 +70,13 @@ const registration = async (req, res) => {
   
     const userT = new User(req.body);
     const hashed = await hash.hashPass(userT.password);
-  
+  // no need to create variable if use it once
     userT.password = hashed;
     
   
     userT.save((err) => {
       if (err) {
-        console.log(err);
+        console.log(err); // ?
         return res.status(400).send(err); 
       }
       else{
@@ -88,7 +89,7 @@ const registration = async (req, res) => {
 
     const { user } = req;
 
-    if(req.params.id !== user._id)
+    if(req.params.id !== user._id) // curly brace here
     {
       return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
     }
@@ -111,7 +112,7 @@ const registration = async (req, res) => {
 
     const { user } = req;
 
-    if(req.params.id !== user._id)
+    if(req.params.id !== user._id) // curly brace here
     {
       return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
     }
