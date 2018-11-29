@@ -24,6 +24,10 @@ const login = async (req, res) => {
           .send({ messege: messeges.NOT_FOUND });
       }
   
+      if (user.isBanned) {
+        return res.status(403).send({message: messeges.PROHIBITED_PERMISSIOM});
+      }
+
       const isOk = await user.comparePasswords(req.body.password);
   
       if (!isOk) {

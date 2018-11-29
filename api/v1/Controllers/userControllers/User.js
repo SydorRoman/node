@@ -94,7 +94,37 @@ const updateUser = (req, res) => {
     .catch(err => res.status(404).send(err));
 };
 
+const banUser = (req,res) => {
+  User.findOneAndUpdate({_id: req.params.id}, {isBanned: true}, { new: true, runValidators: true})
+    .exec()
+    .then( res.status(200).send({message: messeges.SUCCESS}))
+    .catch(err => res.status(404).send({message: messeges.NOT_FOUND}));
+};
 
+const rebanUser = (req,res) => {
+  User.findOneAndUpdate({_id: req.params.id}, {isBanned: false}, { new: true, runValidators: true})
+    .exec()
+    .then( res.status(200).send({message: messeges.SUCCESS}))
+    .catch(err => res.status(404).send({message: messeges.NOT_FOUND}));
+}
+
+const listOfBanned = (req,res) => {
+  User.find({isBanned: true}, (err, result) => {
+    if (err) {
+      res.send({error: err});
+    }
+    res.send({ users: result });
+  });
+}
+
+const hardBan = (req,res) => {
+  User.findOneAndDelete({_id: req.params.id}, (err) => {
+    if(err){
+      return res.status(404).send({message: messeges.NOT_FOUND})
+    }
+    return res.status(200).send()
+  })
+}
 
 module.exports = {
   getAllUsers,

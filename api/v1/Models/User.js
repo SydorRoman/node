@@ -36,6 +36,10 @@ const userScheme = new Schema({
   role: {
     type: String,
     default: 'USER'
+  },
+  isBanned: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps : true,
