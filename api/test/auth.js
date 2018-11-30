@@ -14,7 +14,7 @@ const user = {
   email: 'name@gmail.com',
   phone: '(063)245-4444',
   dateOfBirth: '2020-10-10T00:00:00.000Z',
-  about: 'Lalal lalal'
+  about: 'Lalal lalal' 
 }
 
 describe('User', () => {
