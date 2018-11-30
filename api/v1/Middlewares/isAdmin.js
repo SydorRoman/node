@@ -15,10 +15,8 @@ exports.isAdmin = async function (req, res, next) {
 
     const decoded = jwt.decode(bearerToken, JWT_SECRET);
     const role = decoded.user.role;
-    if (role === 'ADMIN') {
-        next();
-    } else {
-        return res.status(403).send({ messege: messege.PROHIBITED_PERMISSION });
+    if (role !== 'ADMIN') {
+         return res.status(403).send({ messege: messege.PROHIBITED_PERMISSION });
     }
 
     try {

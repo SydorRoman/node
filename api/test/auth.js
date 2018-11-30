@@ -109,7 +109,7 @@ describe('User', () => {
     it('it should Post a new User', (done) => {
       let user = {
         name: 'name',
-        email: 'name123@gmail.com',
+        email: 'name1238@gmail.com',
         phone: '(063)245-4444',
         dateOfBirth: '2020-10-10T00:00:00.000Z',
         about: 'Lalal lalal',

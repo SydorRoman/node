@@ -159,10 +159,6 @@ describe('Car', () => {
                     .send(newC)
                     .set('Authorization', `Bearer ${token}`)
                     .end((err, res) => {
-                        //if (err) { console.log(err);}
-                        console.log("-----------------------");
-                        console.log(res.body);
-                        
                         res.should.have.status(200);
                         res.body.car.should.have.property('model');
                         done();

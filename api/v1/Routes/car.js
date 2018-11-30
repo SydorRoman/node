@@ -172,7 +172,7 @@ app.put('/:id', middleWares.isAdmin, carController.updateCar)
  * @apiErrorExample {json} Car not found
  *    HTTP/1.1 404 Not Found 
  */
-app.delete('/:id',middleWares.isAdmin, carController.deleteCar)
+app.delete('/:id', middleWares.isAdmin, carController.deleteCar)
 
 /**
  * @api {get} http://localhost:8080/api/v1/cars/admin/cars/:id Request All Users of Car (Admin)
