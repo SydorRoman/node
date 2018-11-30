@@ -1,10 +1,10 @@
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
-const User = require('../../../node/api/v1/models/user');
+const server = require('../../server');
+const User = require('../v1/models/user');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../../server');
 
 chai.use(chaiHttp);
 
