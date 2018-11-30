@@ -32,8 +32,6 @@ const getOneUser = (req, res) => {
   });
 };
 
-
-
 const deleteUser = (req, res) => {
 
   const { user } = req;
@@ -95,7 +93,6 @@ const hardBan = (req,res) => {
     return res.status(200).send({message: messeges.SUCCESS});
   });
 };
-
 
 module.exports = {
   getAllUsers,

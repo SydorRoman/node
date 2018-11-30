@@ -25,13 +25,12 @@ const createCar = (req,res) => {
     
     if (req.body._id) delete req.body._id;
     const car = new Car(req.body);
-    
     car.save((err) => {
         if (err) {
             return res.send(err)
         }
         else {
-            return res.status(200).send({car});
+            return res.status(200).send(car);
         }
     });
 };
@@ -214,12 +213,14 @@ const addCarToUserAdmin = (req,res) => {
 
     User.findById(req.params.userId, (err,result) => {
         if (err) {
+            console.log("here");
             return res.send({ messege: messeges.NOT_FOUND});
         }
     });
 
     Car.findById(req.params.carId, (err,result) => {
         if (err) {
+            console.log("223");
             return res.send({ messege: messeges.NOT_FOUND});
         }
     });

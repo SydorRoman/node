@@ -10,7 +10,6 @@ const config = require('./api/config/config');
 const dev = require('./api/config/dev');
 const test = require('./api/config/test');
 
-
 mongoose.Promise = global.Promise;
 
 if (process.env.NODE_ENV === 'test') {

@@ -152,19 +152,21 @@ describe('Car', () => {
     });
 
     describe('/POST create car (ADMIN)', () => {
-        it('it should POST car (ADMIN)', (done) => {
-            car.save((err, car) => {
+        it('it should POST car (ADMIN)', async (done) => {
+            const newC = await Car.create({ model: 'MMM' });
                 chai.request(server)
                     .post('/api/v1/cars')
+                    .send(newC)
                     .set('Authorization', `Bearer ${token}`)
-                    .send(car)
                     .end((err, res) => {
                         //if (err) { console.log(err);}
+                        console.log("-----------------------");
+                        console.log(res.body);
+                        
                         res.should.have.status(200);
                         res.body.car.should.have.property('model');
                         done();
                     });
-            });
         });
     });
 
@@ -239,7 +241,6 @@ describe('Car', () => {
                     .post(`/api/v1/cars/${userTemp._id}/cars/${carTemp._id}`)
                     .set('Authorization', `Bearer ${token}`)
                     .end((err, res) => {
-                        console.log(res.body);
                         res.should.have.status(200);
                         res.body.should.have.property('messege').eql('success');
                         done();
