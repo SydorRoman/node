@@ -22,7 +22,7 @@ const getAllCars = (req,res) => {
 
 //admin
 const createCar = (req,res) => {
-
+    
     if (req.body._id) delete req.body._id;
     const car = new Car(req.body);
     

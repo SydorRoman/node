@@ -92,8 +92,7 @@ const hardBan = (req,res) => {
   User.findOneAndDelete({_id: req.params.id}, (err) => {
     if(err) return res.status(404).send({message: messeges.NOT_FOUND});
     
-    return res.status(200).send()
-    
+    return res.status(200).send({message: messeges.SUCCESS});
   });
 };
 
@@ -103,4 +102,8 @@ module.exports = {
   getOneUser,
   deleteUser,
   updateUser,
+  hardBan,
+  listOfBanned,
+  banUser,
+  rebanUser
 };
