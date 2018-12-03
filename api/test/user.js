@@ -1,17 +1,12 @@
 //During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 
-let mongoose = require('mongoose');
 let User = require('../v1/models/user');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../../server');
-const should = chai.should();
-const jwt = require('jsonwebtoken');
-const {JWT_SECRET} = require('../config/config')
 
-const hash = require('../helper/hashPassword');
 
 chai.use(chaiHttp);
 

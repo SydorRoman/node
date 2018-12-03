@@ -1,23 +1,17 @@
 process.env.NODE_ENV = 'test';
 
-let mongoose = require('mongoose');
 let Car = require('../v1/models/car');
 let User = require('../v1/models/user');
 let RefUserCar = require('../v1/models/refUserCar')
-const jwt = require('jsonwebtoken');
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../../server');
-const should = chai.should();
 
-const hash = require('../helper/hashPassword');
-const { JWT_SECRET } = require('../config/config');
 
 chai.use(chaiHttp);
 
 let token = '123';
-let adminToken = '123';
 let user;
 
 let car = new Car({

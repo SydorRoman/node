@@ -1,6 +1,5 @@
 process.env.NODE_ENV = 'test';
 
-let mongoose = require('mongoose');
 let Product = require('../v1/models/product');
 let User = require('../v1/models/user');
 const jwt = require('jsonwebtoken');
@@ -33,11 +32,7 @@ describe('Product', () => {
             email: 'name@gmail.com',
             password: '$2b$10$LV5jHPplB5b0L5jmYUq4seZcGKE0yoZp9f2C7dPK1ciFrs6pCvVAa'
         })
-        await user.save((err, user) => {
-            if (err) {
-                return err;
-            }
-        });
+        await user.save();
     
         user.password = 'test';
         chai.request(server)
