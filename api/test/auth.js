@@ -17,7 +17,7 @@ const user = {
   about: 'Lalal lalal' 
 }
 
-describe('User', () => {
+describe('User',() => {
   after((done) => {
     User.remove({}, (err) => {
       done();
@@ -33,12 +33,9 @@ describe('User', () => {
       dateOfBirth: "2019-12-12T00:00:00.000Z",
       about: "Info"
     })
-    await userT.save((err, userT) => {
 
-      if (err) {
-        return err;
-      }
-    });
+    await userT.save();
+    
     userT.password = 'test';
     chai.request(server)
       .post('/api/v1/auth/login')
@@ -102,7 +99,7 @@ describe('User', () => {
         });
     });
     it('it should Post a new User', (done) => {
-      let user = {
+      let userPost = {
         name: 'name',
         email: 'name1238@gmail.com',
         phone: '(063)245-4444',
@@ -112,21 +109,24 @@ describe('User', () => {
       }
       chai.request(server)
         .post('/api/v1/auth/registration')
-        .send(user)
+        .send(userPost)
         .end((err, res) => {
           res.should.have.status(201);
           res.body.should.be.a('object');
-          res.body.userT.should.have.property('name');
-          res.body.userT.should.have.property('email');
-          res.body.userT.should.have.property('password');
+          res.body.user.should.have.property('name');
+          res.body.user.should.have.property('email');
+          res.body.user.should.have.property('password');
           done();
         })
     });
   });
 
-  describe('/PUT/:id user', () => {
+  describe('/PUT/:id user',async () => {
+    
+
     it('it should UPDATE email of user by the id', (done) => {
-      userT.save((err, userT) => {
+     
+      userT.save((err, userT) => { 
         chai.request(server)
           .put('/api/v1/auth/changeEmail/' + userT._id)
           .set('Authorization', `Bearer ${token}`)

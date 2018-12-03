@@ -8,7 +8,6 @@ const messeges = require('../../../notification/notification');
 const login = async (req, res) => {
     let token;
     let user;
-
     try {
       user = await User.findOne({ email: req.body.email });
   
@@ -64,8 +63,8 @@ const registration = async (req, res) => {
       return res.status(422).send({ message: messeges.EMAIL_REQUIRE });
     }
   
-    const userT = new User(req.body);
-    userT.password = await hash.hashPass(userT.password);
+    const user = new User(req.body);
+    user.password = await hash.hashPass(user.password);
     
   
     userT.save((err) => {
@@ -74,7 +73,7 @@ const registration = async (req, res) => {
         return res.status(400).send(err); 
       }
       else{
-        res.status(201).send({ userT });
+        res.status(201).send({ user });
       }
     });
   };

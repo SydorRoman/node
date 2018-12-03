@@ -18,6 +18,7 @@ exports.verifyToken = async function (req, res, next) {
       req.user = result.user;
       return next();
     } catch ({ message }) {
+      console.log("WE ARE HERE 21 VERUFYTIKEN");
       res.status(500);
       return res.send({ error : message });
     }
