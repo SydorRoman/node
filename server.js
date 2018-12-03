@@ -5,10 +5,11 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const config = require('./api/config/config');
-const Routes = require('./api/v1/routes');
 
 const dev = require('./api/config/dev');
 const test = require('./api/config/test');
+
+const Routes = require('./api/v1/routes');
 
 mongoose.Promise = global.Promise;
 
