@@ -35,8 +35,8 @@ const login = async (req, res) => {
       token = await jwt.sign(
         { user },
         JWT_SECRET,
-        { expiresIn: 1000 * 60 * 60 * 24 * 365 },
-      );
+        { expiresIn: 1000 * 60 * 60 * 24 * 365 });
+        
       if (!req.session) {
         req.session = {};
       }
