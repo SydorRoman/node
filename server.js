@@ -1,4 +1,4 @@
-const Routes = require('./api/v1/routes');
+const Routes = require('./api/v1/routes/index');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const express = require('express');
