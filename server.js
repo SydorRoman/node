@@ -1,11 +1,11 @@
-const Routes = require('./api/v1/routes');
+const express = require('express');
+const app = express();
+const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session');
-const app = express();
 const config = require('./api/config/config');
+const Routes = require('./api/v1/routes');
 
 const dev = require('./api/config/dev');
 const test = require('./api/config/test');
