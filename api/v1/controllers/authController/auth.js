@@ -36,7 +36,7 @@ const login = async (req, res) => {
         { user },
         JWT_SECRET,
         { expiresIn: 1000 * 60 * 60 * 24 * 365 });
-        
+
       if (!req.session) {
         req.session = {};
       }
@@ -90,8 +90,7 @@ const registration = async (req, res) => {
     User.findByIdAndUpdate(
       req.params.id,
       { password },
-      { new: true, runValidators: true },
-    )
+      { new: true, runValidators: true })
       .exec()
       .then((userData) => {
         res.status(200).send(userData);
@@ -109,8 +108,7 @@ const registration = async (req, res) => {
     User.findOneAndUpdate(
       { _id: req.params.id},
       { email: req.body.email },
-      { new: true, runValidators: true },
-    )
+      { new: true, runValidators: true })
       .exec()
       .then((userData) => {
         res.status(200).send(userData);
