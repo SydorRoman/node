@@ -9,7 +9,7 @@ const config = require('./api/config/config');
 const dev = require('./api/config/dev');
 const test = require('./api/config/test');
 
-const Routes = require('./api/v1/routes');
+// const Routes = require('./api/v1/routes');
 
 mongoose.Promise = global.Promise;
 
